@@ -1,0 +1,27 @@
+textarea,select{width:100%;padding:.8rem .9rem;border-radius:var(--radius-sm);border:var(--border);background:var(--black);color:var(--white);font:inherit}
+textarea{resize:vertical;min-height:84px}
+.badge{display:inline-block;padding:.15rem .6rem;border-radius:99px;font-size:.78rem;font-weight:700;background:var(--green-dark);color:var(--neon);border:1px solid var(--olive)}
+.badge.warn{background:#3a2a05;color:#f0c24b;border-color:#7a5a10}
+.ok{color:var(--neon);font-weight:700}
+.pre{white-space:pre-wrap}
+.empty{text-align:center;color:var(--silver);display:grid;gap:.5rem;justify-items:center}
+.empty i{font-size:1.6rem;color:var(--olive)}
+.rows{list-style:none;padding:0;display:grid}
+.rows li{display:flex;justify-content:space-between;gap:1rem;padding:.6rem 0;border-top:var(--border)}
+.rows li:first-child{border-top:0}
+.rows li span{color:var(--silver);text-align:right}
+.skeleton{height:96px;border-radius:var(--radius);background:linear-gradient(90deg,var(--black-green),var(--green-dark),var(--black-green));background-size:200% 100%;animation:sk 1.4s linear infinite;margin-bottom:.8rem}
+@keyframes sk{to{background-position:-200% 0}}
+@media (prefers-reduced-motion:reduce){.skeleton{animation:none}*{scroll-behavior:auto!important}}
+dialog{width:min(560px,94vw);max-height:90dvh;overflow:auto;background:var(--black-green);color:var(--white);border:var(--border);border-radius:var(--radius);padding:1.25rem}
+dialog::backdrop{background:rgba(5,5,2,.8)}
+.table-wrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.9rem}
+th,td{padding:.55rem .6rem;text-align:left;border-bottom:var(--border);white-space:nowrap}
+th{color:var(--silver);font-weight:600}
+.cover{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:var(--radius-sm);background:var(--green-dark);margin-bottom:.6rem}
+.prod-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:.8rem}
+.prod{display:flex;flex-direction:column;gap:.35rem}
+.prod .cover{aspect-ratio:1}
+.prod .btn{margin-top:auto}
+.thumb{width:48px;height:48px;border-radius:8px;object-fit:cover;background:var(--green-dark)}
