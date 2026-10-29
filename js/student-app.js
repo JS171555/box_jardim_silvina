@@ -172,7 +172,12 @@ async function presenca() {
 }
 
 const perfilStats = (st, sess) => `<section class="stats">${stat("fa-calendar-check", st.presences, "presenças")}${stat("fa-dumbbell", st.completed, "treinos")}${stat("fa-fire", st.streak, "sequência")}</section>
-  <section class="card"><h3><i class="fa-solid fa-list-check"></i> Histórico de treinos</h3>${sess.length ? `<ul class="rows">${sess.map((x) => `<li><span style="text-align:left;color:var(--white)">${esc(x.workouts?.title)}<small class="muted" style="display:block">${fmtDate(x.workouts.workout_date)}</small></span><span>${esc(fmtResult(Array.isArray(x.workout_results) ? x.workout_results[0] : x.workout_results))}</span></li>`).join("")}</ul>` : '<div class="empty"><p>Nenhum treino concluído ainda.</p></div>'}</section>
+  <section class="card"><h3><i class="fa-solid fa-list-check"></i> Histórico de treinos</h3>${sess.length ? `<ul class="rows">${sess.map((x) => {
+    const workout = x.workouts;
+    const workoutDate = workout?.workout_date ? fmtDate(workout.workout_date) : x.finished_at ? dBR(x.finished_at) : "Data indisponível";
+    const workoutTitle = workout?.title || "Treino não disponível";
+    return `<li><span style="text-align:left;color:var(--white)">${esc(workoutTitle)}<small class="muted" style="display:block">${esc(workoutDate)}</small></span><span>${esc(fmtResult(Array.isArray(x.workout_results) ? x.workout_results[0] : x.workout_results))}</span></li>`;
+  }).join("")}</ul>` : '<div class="empty"><p>Nenhum treino concluído ainda.</p></div>'}</section>
   <a class="btn" href="#conquistas"><i class="fa-solid fa-trophy"></i> Ver conquistas</a>`;
 
 async function perfil() {
