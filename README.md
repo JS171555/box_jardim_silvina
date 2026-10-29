@@ -2,6 +2,15 @@
 
 HTML + CSS + JS puro (ES Modules) com Supabase. Sem build.
 
+## Instalação como aplicativo (PWA)
+
+O projeto inclui manifest, ícones Android/iOS, modo standalone e service worker. Publique o site em **HTTPS** (por exemplo, GitHub Pages) para habilitar a instalação; o service worker não funciona em hospedagem HTTP comum nem ao abrir os arquivos diretamente com `file://`. O login e os dados do Supabase ainda precisam de conexão com a internet.
+
+- **Android:** abra a URL publicada no Chrome ou outro navegador compatível. Use **Instalar app** ou **Adicionar à tela inicial** no menu do navegador; a sugestão de instalação pode aparecer automaticamente quando os critérios do navegador forem atendidos.
+- **iPhone/iPad:** abra a URL publicada no Safari, toque em **Compartilhar** → **Adicionar à Tela de Início** e confirme em **Adicionar**. No iOS, a instalação é feita por esse menu manualmente, não pelo prompt automático típico do Android. Se o item não aparecer, role as ações no menu Compartilhar e confirme que o site está aberto no Safari, não dentro de outro app.
+
+O manifest usa caminhos relativos para funcionar tanto no domínio raiz quanto em um endereço sob caminho de projeto do GitHub Pages. Após uma atualização, se o app instalado ainda mostrar a versão antiga, feche e reabra-o ou remova-o da tela inicial e instale novamente.
+
 ## Já implementado
 - Login e cadastro (e-mail/senha), Google, recuperação de senha, logout, sessão persistente.
 - Configuração de perfil única (nome + foto opcional) com validação de arquivo (tamanho, assinatura real, compressão WebP).
