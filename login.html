@@ -1,94 +1,133 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="pt-BR">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#050502">
-<title>Entrar · BOX Jardim Silvina</title>
-<link rel="stylesheet" href="css/tokens.css">
-<link rel="stylesheet" href="css/global.css">
-<link rel="stylesheet" href="css/auth.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
-</head>
-<body>
-<main class="auth">
-  <div class="logo-wrap">
-    <div class="halo" id="halo"></div>
-    <img id="logo" src="assets/images/logo-box.png" alt="BOX Training Jardim Silvina" width="260" height="260">
-  </div>
-  <h1>Bora treinar?</h1>
-  <p class="muted" id="cfg-warn" hidden>Configuração pendente: preencha js/config.js com a URL e a chave do Supabase.</p>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <meta name="theme-color" content="#050502" />
+        <title>Entrar · BOX Jardim Silvina</title>
+        <link rel="icon" type="image/png" href="assets/images/kettlebell.png">
+        <link rel="stylesheet" href="css/tokens.css" />
+        <link rel="stylesheet" href="css/global.css" />
+        <link rel="stylesheet" href="css/auth.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+    </head>
+    <body>
+        <main class="auth">
+            <div class="logo-wrap">
+                <div class="halo" id="halo"></div>
+                <img
+                    id="logo"
+                    src="assets/images/logo-box.png"
+                    alt="BOX Training Jardim Silvina"
+                    width="260"
+                    height="260"
+                />
+            </div>
+            <h1>Bora treinar?</h1>
+            <p class="muted" id="cfg-warn" hidden>
+                Configuração pendente: preencha js/config.js com a URL e a chave do Supabase.
+            </p>
 
-  <section class="card" id="form-card">
-    <div class="tabs" role="tablist">
-      <button class="tab" role="tab" id="tab-in" aria-selected="true">Entrar</button>
-      <button class="tab" role="tab" id="tab-up" aria-selected="false">Criar conta</button>
-    </div>
-    <form id="form" novalidate>
-      <label for="email">E-mail</label>
-      <input id="email" type="email" autocomplete="email" required>
-      <div id="pw-wrap">
-        <label for="password">Senha</label>
-        <input id="password" type="password" autocomplete="current-password" minlength="8" required>
-      </div>
-      <button class="btn btn-primary" id="submit" type="submit" style="margin-top:1.1rem"><i class="fa-solid fa-bolt"></i><span id="submit-label">Entrar</span></button>
-    </form>
-    <button class="link" id="forgot" type="button">Esqueci minha senha</button>
-    <p class="divider">ou</p>
-    <button class="btn" id="google" type="button"><i class="fa-brands fa-google"></i> Continuar com Google</button>
-  </section>
-  <p class="muted" style="text-align:center"><a href="admin.html">Acesso do treinador</a></p>
-</main>
-<div id="toasts" aria-live="polite"></div>
-<script type="module">
-import { configured, supabase } from "./js/supabase-client.js";
-import { signIn, signUp, signInGoogle, resetPassword } from "./js/auth.js";
-import { toast, guarded, friendly, reducedMotion } from "./js/ui.js";
+            <section class="card" id="form-card">
+                <div class="tabs" role="tablist">
+                    <button class="tab" role="tab" id="tab-in" aria-selected="true">Entrar</button>
+                    <button class="tab" role="tab" id="tab-up" aria-selected="false">Criar conta</button>
+                </div>
+                <form id="form" novalidate>
+                    <label for="email">E-mail</label>
+                    <input id="email" type="email" autocomplete="email" required />
+                    <div id="pw-wrap">
+                        <label for="password">Senha</label>
+                        <input id="password" type="password" autocomplete="current-password" minlength="8" required />
+                    </div>
+                    <button class="btn btn-primary" id="submit" type="submit" style="margin-top: 1.1rem">
+                        <i class="fa-solid fa-bolt"></i><span id="submit-label">Entrar</span>
+                    </button>
+                </form>
+                <button class="link" id="forgot" type="button">Esqueci minha senha</button>
+                <p class="divider">ou</p>
+                <button class="btn" id="google" type="button">
+                    <i class="fa-brands fa-google"></i> Continuar com Google
+                </button>
+            </section>
+            <p class="muted" style="text-align: center"><a href="admin.html">Acesso do treinador</a></p>
+        </main>
+        <div id="toasts" aria-live="polite"></div>
+        <script type="module">
+            import { configured, supabase } from "./js/supabase-client.js";
+            import { signIn, signUp, signInGoogle, resetPassword } from "./js/auth.js";
+            import { toast, guarded, friendly, reducedMotion } from "./js/ui.js";
 
-if (!configured) document.getElementById("cfg-warn").hidden = false;
-else supabase.auth.getSession().then(({ data }) => { if (data.session) location.replace("aluno.html"); });
+            if (!configured) document.getElementById("cfg-warn").hidden = false;
+            else
+                supabase.auth.getSession().then(({ data }) => {
+                    if (data.session) location.replace("aluno.html");
+                });
 
-let mode = "in";
-const $ = (id) => document.getElementById(id);
-function setMode(m) {
-  mode = m;
-  $("tab-in").setAttribute("aria-selected", m === "in");
-  $("tab-up").setAttribute("aria-selected", m === "up");
-  $("submit-label").textContent = m === "in" ? "Entrar" : "Criar conta";
-  $("password").autocomplete = m === "in" ? "current-password" : "new-password";
-}
-$("tab-in").onclick = () => setMode("in");
-$("tab-up").onclick = () => setMode("up");
+            let mode = "in";
+            const $ = (id) => document.getElementById(id);
+            function setMode(m) {
+                mode = m;
+                $("tab-in").setAttribute("aria-selected", m === "in");
+                $("tab-up").setAttribute("aria-selected", m === "up");
+                $("submit-label").textContent = m === "in" ? "Entrar" : "Criar conta";
+                $("password").autocomplete = m === "in" ? "current-password" : "new-password";
+            }
+            $("tab-in").onclick = () => setMode("in");
+            $("tab-up").onclick = () => setMode("up");
 
-$("form").addEventListener("submit", (e) => {
-  e.preventDefault();
-  const email = $("email").value.trim(), pw = $("password").value;
-  if (!email || pw.length < 8) return toast("Informe um e-mail e uma senha com 8+ caracteres.", "error");
-  guarded($("submit"), async () => {
-    try {
-      if (mode === "in") { await signIn(email, pw); location.href = "aluno.html"; }
-      else {
-        const d = await signUp(email, pw);
-        if (d.session) location.href = "aluno.html";
-        else toast("Conta criada. Confirme seu e-mail para entrar.");
-      }
-    } catch (err) { toast(friendly(err), "error"); }
-  });
-});
-$("google").onclick = (e) => guarded(e.currentTarget, async () => { try { await signInGoogle(); } catch (err) { toast(friendly(err), "error"); } });
-$("forgot").onclick = (e) => {
-  const email = $("email").value.trim();
-  if (!email) return toast("Digite seu e-mail acima primeiro.", "error");
-  guarded(e.currentTarget, async () => { try { await resetPassword(email); toast("Enviamos o link de recuperação para o seu e-mail."); } catch (err) { toast(friendly(err), "error"); } });
-};
+            $("form").addEventListener("submit", (e) => {
+                e.preventDefault();
+                const email = $("email").value.trim(),
+                    pw = $("password").value;
+                if (!email || pw.length < 8) return toast("Informe um e-mail e uma senha com 8+ caracteres.", "error");
+                guarded($("submit"), async () => {
+                    try {
+                        if (mode === "in") {
+                            await signIn(email, pw);
+                            location.href = "aluno.html";
+                        } else {
+                            const d = await signUp(email, pw);
+                            if (d.session) location.href = "aluno.html";
+                            else toast("Conta criada. Confirme seu e-mail para entrar.");
+                        }
+                    } catch (err) {
+                        toast(friendly(err), "error");
+                    }
+                });
+            });
+            $("google").onclick = (e) =>
+                guarded(e.currentTarget, async () => {
+                    try {
+                        await signInGoogle();
+                    } catch (err) {
+                        toast(friendly(err), "error");
+                    }
+                });
+            $("forgot").onclick = (e) => {
+                const email = $("email").value.trim();
+                if (!email) return toast("Digite seu e-mail acima primeiro.", "error");
+                guarded(e.currentTarget, async () => {
+                    try {
+                        await resetPassword(email);
+                        toast("Enviamos o link de recuperação para o seu e-mail.");
+                    } catch (err) {
+                        toast(friendly(err), "error");
+                    }
+                });
+            };
 
-// Animação da logo (GSAP). Sem GSAP ou com movimento reduzido, a logo aparece estática.
-window.addEventListener("load", () => {
-  if (!window.gsap || reducedMotion()) return;
-  gsap.from("#logo", { scale: .85, opacity: 0, duration: .9, ease: "power3.out" });
-  gsap.fromTo("#halo", { opacity: .35, scale: .95 }, { opacity: .85, scale: 1.06, duration: 2.2, ease: "sine.inOut", yoyo: true, repeat: -1 });
-});
-</script>
-</body>
+            // Animação da logo (GSAP). Sem GSAP ou com movimento reduzido, a logo aparece estática.
+            window.addEventListener("load", () => {
+                if (!window.gsap || reducedMotion()) return;
+                gsap.from("#logo", { scale: 0.85, opacity: 0, duration: 0.9, ease: "power3.out" });
+                gsap.fromTo(
+                    "#halo",
+                    { opacity: 0.35, scale: 0.95 },
+                    { opacity: 0.85, scale: 1.06, duration: 2.2, ease: "sine.inOut", yoyo: true, repeat: -1 }
+                );
+            });
+        </script>
+    </body>
 </html>

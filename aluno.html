@@ -1,27 +1,31 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="pt-BR">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#050502">
-<title>Meu painel · BOX Jardim Silvina</title>
-<link rel="stylesheet" href="css/tokens.css">
-<link rel="stylesheet" href="css/global.css">
-<link rel="stylesheet" href="css/components.css">
-<link rel="stylesheet" href="css/dashboard.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
-</head>
-<body class="app">
-<main id="view" aria-live="polite"><div class="skeleton"></div><div class="skeleton"></div></main>
-<nav id="nav" aria-label="Navegação principal">
-  <a href="#inicio" data-r="inicio"><i class="fa-solid fa-house"></i>Início</a>
-  <a href="#treino" data-r="treino"><i class="fa-solid fa-dumbbell"></i>Treino</a>
-  <a href="#ranking" data-r="ranking"><i class="fa-solid fa-ranking-star"></i>Ranking</a>
-  <a href="#eventos" data-r="eventos"><i class="fa-solid fa-calendar-days"></i>Eventos</a>
-  <a href="#mais" data-r="mais"><i class="fa-solid fa-ellipsis"></i>Mais</a>
-</nav>
-<div id="toasts" aria-live="polite" style="bottom:calc(76px + env(safe-area-inset-bottom))"></div>
-<script type="module" src="js/student-app.js"></script>
-</body>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+        <meta name="theme-color" content="#050502" />
+        <title>Meu painel · BOX Jardim Silvina</title>
+        <link rel="icon" type="image/png" href="assets/images/kettlebell.png">
+        <link rel="stylesheet" href="css/tokens.css" />
+        <link rel="stylesheet" href="css/global.css" />
+        <link rel="stylesheet" href="css/components.css" />
+        <link rel="stylesheet" href="css/dashboard.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+    </head>
+    <body class="app">
+        <main id="view" aria-live="polite">
+            <div class="skeleton"></div>
+            <div class="skeleton"></div>
+        </main>
+        <nav id="nav" aria-label="Navegação principal">
+            <a href="#inicio" data-r="inicio"><i class="fa-solid fa-house"></i>Início</a>
+            <a href="#treino" data-r="treino"><i class="fa-solid fa-dumbbell"></i>Treino</a>
+            <a href="#ranking" data-r="ranking"><i class="fa-solid fa-ranking-star"></i>Ranking</a>
+            <a href="#eventos" data-r="eventos"><i class="fa-solid fa-calendar-days"></i>Eventos</a>
+            <a href="#mais" data-r="mais"><i class="fa-solid fa-ellipsis"></i>Mais</a>
+        </nav>
+        <div id="toasts" aria-live="polite" style="bottom: calc(76px + env(safe-area-inset-bottom))"></div>
+        <script type="module" src="js/student-app.js"></script>
+    </body>
 </html>
