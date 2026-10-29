@@ -90,7 +90,7 @@ td .btn { width: auto; min-height: 34px; padding: .3rem .7rem; font-size: .8rem;
 .avatar-xs { width: 38px; height: 38px; border: 1px solid var(--line-strong); }
 
 /* Dialog */
-dialog { width: min(94vw, 560px); max-height: 90dvh; overflow: auto; padding: 1.4rem; color: var(--text); background: var(--surface); border: 1px solid var(--line-strong); border-radius: var(--r-lg); box-shadow: 0 40px 80px -20px rgba(0,0,0,.9); }
+dialog { width: min(94vw, 560px); max-height: 90vh; max-height: 90dvh; overflow: auto; padding: 1.4rem; color: var(--text); background: var(--surface); border: 1px solid var(--line-strong); border-radius: var(--r-lg); box-shadow: 0 40px 80px -20px rgba(0,0,0,.9); }
 dialog[open] { animation: dlg-in .35s var(--ease); }
 dialog::backdrop { background: rgba(4,5,3,.7); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
 dialog .actions .btn { flex: 1; }

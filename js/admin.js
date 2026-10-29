@@ -4,6 +4,7 @@ import { toast, guarded, friendly, esc, animateIn } from "./ui.js";
 import { todaySP, addDays, mondayOf, fmtDate, fmtDateTime, toSPInput, fromSPInput } from "./dates.js";
 import { uploadPublicImage, publicUrl, removeImage } from "./uploads.js";
 import { brl } from "./store.js";
+import { createId } from "./ids.js";
 
 const $ = (s, r = document) => r.querySelector(s);
 const ok = ({ data, error }) => { if (error) throw error; return data; };
@@ -160,7 +161,7 @@ async function summary() {
 const CRIT = { presences: "Presenças acumuladas", workouts: "Treinos concluídos", streak: "Sequência de frequência", level: "Nível alcançado", throne_hours: "Horas no Trono",
   throne_days: "Dias seguidos no Trono", weekly_champion: "Semanas como campeão", monthly_champion: "Meses como campeão", comeback_days: "Retorno após N dias de ausência", events: "Eventos com participação validada" };
 const SRC = { checkin: "Check-in", workout_completed: "Treino", result_logged: "Resultado", achievement: "Conquista", event: "Evento", manual_bonus: "Bônus", adjustment: "Ajuste", reversal: "Estorno" };
-let bonusKey = crypto.randomUUID();
+let bonusKey = createId();
 async function tabGame() {
   const [rules, studs, tx, achs] = await Promise.all([
     supabase.from("xp_rules").select("*").order("code").then(ok),
@@ -196,7 +197,7 @@ async function tabGame() {
       if ($("#b-kind").value === "manual_bonus" && amt < 0) return toast("Bônus deve ser positivo; use Ajuste para valores negativos.", "error");
       if (why.length < 3) return toast("Informe a justificativa.", "error");
       await supabase.rpc("admin_grant_xp", { p_user: $("#b-st").value, p_amount: amt, p_kind: $("#b-kind").value, p_reason: why, p_key: bonusKey }).then(ok);
-      bonusKey = crypto.randomUUID(); toast("XP concedido e auditado."); await tabGame(); });
+      bonusKey = createId(); toast("XP concedido e auditado."); await tabGame(); });
     else if (act === "rev") open(`<h2>Estornar transação</h2><p class="muted">Cria uma transação negativa; o histórico original é mantido.</p>${area("x-why", "Justificativa (obrigatória)", "")}`, async (f) => {
       await supabase.rpc("admin_reverse_xp", { p_tx: b.dataset.id, p_reason: g(f, "x-why") }).then(ok); dlg.close(); toast("Estorno registrado."); await tabGame(); });
     else if (act === "reconcile") run(async () => { const r = await supabase.rpc("admin_reconcile_xp").then(ok); toast(r.fixed ? `${r.fixed} saldo(s) corrigido(s).` : "Todos os saldos estão consistentes."); });

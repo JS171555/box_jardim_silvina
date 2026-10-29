@@ -1,4 +1,4 @@
-.auth { width: min(100%, 440px); margin: 0 auto; padding: max(2rem, env(safe-area-inset-top)) 1.2rem 2.5rem; min-height: 100dvh; display: flex; flex-direction: column; justify-content: center; gap: 1rem; }
+.auth { width: min(100%, 440px); margin: 0 auto; padding: max(2rem, env(safe-area-inset-top)) 1.2rem 2.5rem; min-height: 100vh; min-height: 100dvh; display: flex; flex-direction: column; justify-content: center; gap: 1rem; }
 .auth h1 { text-align: center; margin: .2rem 0 .4rem; }
 .logo-wrap { position: relative; width: clamp(170px, 48vw, 230px); aspect-ratio: 1; margin: 0 auto; display: grid; place-items: center; }
 .logo-wrap img { position: relative; z-index: 1; width: 100%; height: auto; filter: drop-shadow(0 18px 30px rgba(0,0,0,.6)); }
