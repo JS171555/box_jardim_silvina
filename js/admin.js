@@ -1,6 +1,6 @@
 import { requireUser, signIn, signOut } from "./auth.js";
 import { supabase } from "./supabase-client.js";
-import { toast, guarded, friendly, esc } from "./ui.js";
+import { toast, guarded, friendly, esc, animateIn } from "./ui.js";
 import { todaySP, addDays, mondayOf, fmtDate, fmtDateTime, toSPInput, fromSPInput } from "./dates.js";
 import { uploadPublicImage, publicUrl, removeImage } from "./uploads.js";
 import { brl } from "./store.js";
@@ -312,8 +312,13 @@ async function tabLoja() {
 let tab = "treinos";
 const TABS = { treinos: tabTreinos, individual: tabIndividual, presenca: tabPresenca, game: tabGame, eventos: tabEventos, loja: tabLoja };
 async function show() {
-  document.querySelectorAll(".tabbar .tab").forEach((t) => t.setAttribute("aria-selected", t.dataset.tab === tab));
-  try { await TABS[tab](); } catch (e) { main.innerHTML = `<div class="card"><p>${esc(friendly(e))}</p></div>`; }
+  const tabs = [...document.querySelectorAll(".tabbar .tab")];
+  tabs.forEach((t) => { t.setAttribute("aria-selected", t.dataset.tab === tab); t.disabled = true; });
+  main.setAttribute("aria-busy", "true");
+  main.innerHTML = '<div class="card loading-card" role="status"><span class="btn-spinner" aria-hidden="true"></span><span>Carregando esta área…</span></div>';
+  try { await TABS[tab](); animateIn(main); }
+  catch (e) { main.innerHTML = `<div class="card" role="alert"><p>${esc(friendly(e))}</p><button class="btn" data-retry> Tentar novamente </button></div>`; main.querySelector("[data-retry]").onclick = show; }
+  finally { main.removeAttribute("aria-busy"); tabs.forEach((t) => { t.disabled = false; }); }
 }
 main.addEventListener("click", async (e) => {
   const b = e.target.closest("[data-act]"); if (!b) return;

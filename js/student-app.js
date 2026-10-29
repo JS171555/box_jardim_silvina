@@ -3,7 +3,7 @@ import { getMyProfile, completeSetup } from "./profile.js";
 import { uploadAvatar, avatarUrl, publicUrl } from "./uploads.js";
 import * as E from "./events.js";
 import * as S from "./store.js";
-import { toast, guarded, friendly, esc, countUp } from "./ui.js";
+import { toast, guarded, friendly, esc, countUp, animateIn } from "./ui.js";
 import { todaySP, addDays, mondayOf, fmtDate, fmtTime, fmtDateTime } from "./dates.js";
 import * as W from "./workouts.js";
 import * as A from "./attendance.js";
@@ -13,7 +13,7 @@ import { celebrate, animateBar, fmtDuration, SOURCE } from "./gamification.js";
 const $ = (s) => document.querySelector(s);
 const view = $("#view");
 let user, profile;
-const LOGO = "assets/images/logo-box.jpg";
+const LOGO = "assets/images/logo-box.png";
 const avatarSrc = () => avatarUrl(profile.avatar_path) || profile.avatar_url || LOGO;
 const loading = () => { view.innerHTML = '<div class="skeleton"></div><div class="skeleton"></div>'; };
 const stat = (ic, n, l) => `<div class="stat"><i class="fa-solid ${ic}"></i><strong data-count="${Number(n) || 0}">0</strong><span>${l}</span></div>`;
@@ -311,8 +311,8 @@ async function route() {
   const [name = "inicio", arg] = location.hash.slice(1).split("/");
   document.querySelectorAll("#nav a").forEach((a) => a.setAttribute("aria-current", a.dataset.r === (["conquistas", "loja", "perfil", "semana", "presenca"].includes(name) ? "mais" : name === "evento" ? "eventos" : name) ? "page" : "false"));
   loading();
-  try { await (ROUTES[name] || inicio)(arg); }
-  catch (e) { view.innerHTML = `<div class="card"><p>${esc(friendly(e))}</p><button class="btn" id="retry">Tentar de novo</button></div>`; $("#retry").onclick = route; }
+  try { await (ROUTES[name] || inicio)(arg); animateIn(view); }
+  catch (e) { view.innerHTML = `<div class="card"><p>${esc(friendly(e))}</p><button class="btn" id="retry">Tentar de novo</button></div>`; $("#retry").onclick = route; animateIn(view); }
 }
 
 function setup() {
@@ -334,6 +334,7 @@ function setup() {
       } catch (err) { toast(friendly(err), "error"); }
     });
   });
+  animateIn(view);
 }
 
 try {
