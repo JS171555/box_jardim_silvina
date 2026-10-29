@@ -1,10 +1,22 @@
-.admin{max-width:900px;margin:0 auto;padding:1rem;display:grid;gap:1rem}
-.tabbar{display:flex;gap:.4rem;overflow-x:auto}
-.tabbar .tab{white-space:nowrap}
-.adm-day{display:grid;gap:.5rem}
-.adm-day .actions{display:flex;flex-wrap:wrap;gap:.4rem}
-.adm-day .btn{width:auto;min-height:40px;padding:.4rem .8rem;font-size:.9rem}
-.actions .btn+.btn{margin-top:0}
-.inline{display:flex;flex-wrap:wrap;gap:.6rem;align-items:end}
-.inline>div{flex:1;min-width:150px}
-.inline .btn{width:auto}
+.admin { width: min(100%, 1180px); margin: 0 auto; padding: max(1rem, env(safe-area-inset-top)) 1rem 3rem; }
+.admin > header { position: sticky; top: 0; z-index: 30; padding: .8rem 0; margin-bottom: .6rem; background: linear-gradient(var(--bg) 70%, transparent); }
+.admin > header h1 { margin: 0; font-size: clamp(1.6rem, 5vw, 2.2rem); display: flex; align-items: center; gap: .6rem; }
+.admin > header h1::before { content: ""; width: 10px; height: 1.1em; border-radius: 3px; background: var(--neon); box-shadow: 0 0 14px rgba(198,244,50,.7); }
+.tabbar { overflow-x: auto; scrollbar-width: none; margin-bottom: 1rem; position: sticky; top: 68px; z-index: 29; background: rgba(25,28,22,.9); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); scroll-snap-type: x proximity; }
+.tabbar::-webkit-scrollbar { display: none; }
+.tabbar .tab { flex: 0 0 auto; scroll-snap-align: start; }
+.adm-day { display: flex; flex-wrap: wrap; gap: .5rem; }
+section.card.adm-day, .card.adm-day { display: block; }
+#adm-view > .weeknav { display: flex; flex-wrap: wrap; justify-content: space-between; }
+#adm-view .weeknav .link { padding: .6rem 1rem; border-radius: var(--r-pill); background: var(--surface-2); border: 1px solid var(--line); text-decoration: none; }
+#adm-view .weeknav .link:hover { border-color: var(--neon); opacity: 1; }
+#adm-view .card h3 { justify-content: space-between; }
+@media (min-width: 900px) {
+  .tabbar { width: fit-content; }
+  #adm-view { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  #adm-view > * { grid-column: 1 / -1; }
+  #adm-view > .card:has(> .actions), #adm-view > section.adm-day { grid-column: auto; }
+}
+@media (min-width: 1200px) {
+  #adm-view:has(> .weeknav) { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}

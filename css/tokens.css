@@ -1,7 +1,32 @@
-:root{
-  --black:#050502;--black-green:#15190C;--green-dark:#28350C;--olive:#445E0A;
-  --lime:#A2BC06;--neon:#CFE218;--white:#EEEFE5;--silver:#C1C2B0;
-  --radius:14px;--radius-sm:8px;--border:1px solid rgba(193,194,176,.16);
-  --glow:0 0 24px rgba(207,226,24,.35);
-  --font:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;--font-body:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+/* BOX Training Jardim Silvina — tokens extraídos da logo (verde neon + preto + branco cromado) */
+@import url("https://fonts.googleapis.com/css2?family=Anton&family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700;800&display=swap");
+:root {
+  --neon: #c6f432;
+  --neon-strong: #b4e61a;
+  --neon-deep: #7fb000;
+  --neon-soft: rgba(198, 244, 50, 0.14);
+  --neon-glow: 0 0 0 1px rgba(198, 244, 50, 0.35), 0 10px 40px -10px rgba(198, 244, 50, 0.45);
+  --ink: #0b0c09;
+  --bg: #070806;
+  --surface: #121410;
+  --surface-2: #191c16;
+  --surface-3: #22261d;
+  --line: rgba(255, 255, 255, 0.08);
+  --line-strong: rgba(255, 255, 255, 0.16);
+  --white: #f4f6ef;
+  --text: #e6e9df;
+  --muted: #9aa190;
+  --danger: #ff5a4e;
+  --warn: #ffc23d;
+  --success: var(--neon);
+  --font-display: "Anton", "Impact", sans-serif;
+  --font-head: "Barlow Condensed", "Arial Narrow", sans-serif;
+  --font-body: "Barlow", system-ui, -apple-system, sans-serif;
+  --r-sm: 10px; --r: 16px; --r-lg: 22px; --r-pill: 999px;
+  --shadow: 0 1px 0 rgba(255,255,255,.04) inset, 0 18px 40px -24px rgba(0,0,0,.9);
+  --ease: cubic-bezier(.22,1,.36,1);
+  --gradient-neon: linear-gradient(135deg, #e4ff6b 0%, var(--neon) 45%, var(--neon-deep) 100%);
+  --gradient-surface: linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,0));
+  --nav-h: 68px;
+  --maxw: 1080px;
 }

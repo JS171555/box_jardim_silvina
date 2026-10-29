@@ -1,4 +1,4 @@
-const CACHE_NAME = 'box-jardim-silvina-v1';
+const CACHE_NAME = 'box-jardim-silvina-v2';
 const APP_SHELL = [
   './',
   './index.html',
@@ -19,6 +19,7 @@ const APP_SHELL = [
   './css/dashboard.css',
   './css/admin.css',
   './css/polish.css',
+  './js/motion.js',
   './js/config.js',
   './js/supabase-client.js',
   './js/auth.js',
