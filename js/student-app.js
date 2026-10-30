@@ -224,7 +224,7 @@ async function ranking(tab = "xp") {
       <p class="muted">Frequência = presenças em dias de treino programado. Faltas só aparecem para você e para o treinador.</p></section>`;
   } else if (tab === "trono") {
     const th = await G.getThrone(), k = th.king;
-    view.innerHTML = `${seg}${k ? `<section class="card king"><i class="fa-solid fa-crown"></i><img src="${esc(avatarOf(k))}" alt="" referrerpolicy="no-referrer"><h2>${esc(k.name)}</h2>
+    view.innerHTML = `${seg}${k ? `<section class="card king king-ranking-spotlight"><i class="fa-solid fa-crown"></i><img src="${esc(avatarOf(k))}" alt="" referrerpolicy="no-referrer"><h2>${esc(k.name)}</h2>
       <p class="muted">Nível ${k.level} · ${k.xp} XP</p><p>No trono há <strong>${fmtDuration(k.summary.current_reign_seconds)}</strong></p>
       <p class="muted">Total acumulado: ${fmtDuration(k.summary.total_seconds)} · dias seguidos: ${k.summary.current_consecutive_days}</p></section>`
       : '<section class="card empty"><i class="fa-solid fa-crown"></i><p>O trono está vazio. Ganhe XP para assumir!</p></section>'}
