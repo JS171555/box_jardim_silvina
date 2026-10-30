@@ -312,6 +312,19 @@ function mais() {
 }
 
 const ROUTES = { inicio, treino, semana, presenca, perfil, ranking, conquistas, eventos, evento, loja, mais };
+let appStarted = false;
+function startApp() {
+  if (!appStarted) {
+    appStarted = true;
+    window.addEventListener("hashchange", route);
+  }
+  const requestedRoute = location.hash.slice(1).split("/")[0];
+  if (!ROUTES[requestedRoute]) {
+    history.replaceState(null, "", `${location.pathname}${location.search}#inicio`);
+  }
+  $("#nav").classList.remove("hidden");
+  return route();
+}
 async function route() {
   const [name = "inicio", arg] = location.hash.slice(1).split("/");
   document.querySelectorAll("#nav a").forEach((a) => a.setAttribute("aria-current", a.dataset.r === (["conquistas", "loja", "perfil", "semana", "presenca"].includes(name) ? "mais" : name === "evento" ? "eventos" : name) ? "page" : "false"));
@@ -335,7 +348,7 @@ function setup() {
         const f = $("#photo").files[0];
         const avatar_path = f ? await uploadAvatar(f, user.id) : null;
         await completeSetup(user.id, { display_name: name, avatar_path });
-        profile = await getMyProfile(user.id); $("#nav").classList.remove("hidden"); toast("Perfil salvo."); await route();
+        profile = await getMyProfile(user.id); toast("Perfil salvo."); await startApp();
       } catch (err) { toast(friendly(err), "error"); }
     });
   });
@@ -348,6 +361,6 @@ try {
     profile = await getMyProfile(user.id);
     if (profile.status === "suspended") { toast("Seu acesso está suspenso. Fale com o treinador.", "error"); setTimeout(signOut, 2500); }
     else if (!profile.profile_setup_done) setup();
-    else { window.addEventListener("hashchange", route); await route(); }
+    else await startApp();
   }
 } catch (e) { view.innerHTML = `<div class="card"><p>${esc(friendly(e))}</p></div>`; }
