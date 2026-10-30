@@ -19,7 +19,7 @@ export function fmtDuration(sec) {
 export function animateBar(el, pct) {
   if (!el) return;
   if (!window.gsap || reducedMotion()) { el.style.width = pct + "%"; return; }
-  gsap.fromTo(el, { width: "0%" }, { width: pct + "%", duration: .9, ease: "power2.out" });
+  window.gsap.fromTo(el, { width: "0%" }, { width: pct + "%", duration: .9, ease: "power2.out" });
 }
 // Celebração de XP / nível / conquistas (overlay acessível; fecha com botão ou Esc).
 export function celebrate(r) {
@@ -41,8 +41,8 @@ export function celebrate(r) {
   if (xpEl) {
     if (window.gsap && !reducedMotion()) {
       const o = { v: 0 };
-      gsap.from(".celebrate-card", { scale: .85, opacity: 0, duration: .45, ease: "back.out(1.6)" });
-      gsap.to(o, { v: r.xp, duration: .9, ease: "power2.out", onUpdate: () => { xpEl.textContent = Math.round(o.v); } });
+      window.gsap.from(".celebrate-card", { scale: .85, opacity: 0, duration: .45, ease: "back.out(1.6)" });
+      window.gsap.to(o, { v: r.xp, duration: .9, ease: "power2.out", onUpdate: () => { xpEl.textContent = Math.round(o.v); } });
     } else xpEl.textContent = r.xp;
   }
 }

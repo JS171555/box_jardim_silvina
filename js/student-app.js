@@ -46,10 +46,12 @@ const throneBanner = (th) => th.king ? `<a class="card king" href="#ranking/tron
 const homeExtras = (evs, prods) => `${evs.length ? `<section class="card"><h3><i class="fa-solid fa-calendar-days"></i> Próximos eventos</h3><ul class="rows">${evs.map((e) => `<li><a href="#evento/${e.id}">${esc(e.title)}</a><span>${fmtDateTime(e.starts_at)}</span></li>`).join("")}</ul></section>` : ""}
   ${prods.length ? `<section class="card"><h3><i class="fa-solid fa-bag-shopping"></i> Em destaque na loja</h3><ul class="rows">${prods.map((p) => `<li><a href="#loja">${esc(p.title)}</a><span>${p.price != null ? S.brl(p.price) : ""}</span></li>`).join("")}</ul></section>` : ""}`;
 
-async function inicio() {
+async function inicio(_arg, routeId) {
   const t = todaySP();
   const [st, w, next, g, th, evs, prods] = await Promise.all([A.myStats(), W.getWorkout(t), W.nextWorkout(t), G.myGame(), G.getThrone(), E.upcoming(2), S.featured(3)]);
+  if (!isCurrentRoute(routeId)) return;
   const s = w ? await W.getSession(w.id, user.id) : null;
+  if (!isCurrentRoute(routeId)) return;
   const label = !s ? "Iniciar treino" : s.status === "in_progress" ? "Continuar treino" : "Ver resultado";
   view.innerHTML = `
     <header class="hero"><img class="avatar-sm" src="${esc(avatarSrc())}" alt="" referrerpolicy="no-referrer">
@@ -117,12 +119,14 @@ function sessionBlock(w, s, date, today) {
     <button class="btn btn-primary" id="finish"><i class="fa-solid fa-flag-checkered"></i> Finalizar treino</button></section>`;
 }
 
-async function treino(date) {
+async function treino(date, routeId) {
   const t = todaySP(); date = date || t;
   const w = await W.getWorkout(date);
+  if (!isCurrentRoute(routeId)) return;
   const head = `<header class="bar"><a class="back" href="#semana/${mondayOf(date)}" aria-label="Voltar para a semana"><i class="fa-solid fa-chevron-left"></i></a><h2>${fmtDate(date, { weekday: "long", day: "2-digit", month: "long" })}</h2></header>`;
   if (!w) { view.innerHTML = head + '<div class="card empty"><i class="fa-solid fa-bed"></i><p>Sem treino publicado neste dia.</p></div>'; return; }
   const s = await W.getSession(w.id, user.id);
+  if (!isCurrentRoute(routeId)) return;
   const sec = (ic, title, x) => x ? `<section class="card"><h3><i class="fa-solid ${ic}"></i> ${title}</h3><p class="pre">${esc(x)}</p></section>` : "";
   const movs = (w.movements || []).length ? `<section class="card"><h3><i class="fa-solid fa-list-check"></i> Movimentos</h3><ul class="rows">${w.movements.map((m) => `<li><strong>${esc(m.name)}</strong><span>${esc(m.prescription)}</span></li>`).join("")}</ul></section>` : "";
   view.innerHTML = head + `
@@ -144,9 +148,10 @@ async function treino(date) {
   }));
 }
 
-async function semana(arg) {
+async function semana(arg, routeId) {
   const t = todaySP(), mon = mondayOf(arg || t);
   const rows = await W.listWeek(mon, addDays(mon, 6));
+  if (!isCurrentRoute(routeId)) return;
   const by = Object.fromEntries(rows.map((r) => [r.workout_date, r]));
   const days = [...Array(7)].map((_, i) => addDays(mon, i)).map((d) => {
     const w = by[d];
@@ -159,8 +164,9 @@ async function semana(arg) {
     <a href="#semana/${addDays(mon, 7)}" aria-label="Próxima semana"><i class="fa-solid fa-chevron-right"></i></a></div>${days}`;
 }
 
-async function presenca() {
+async function presenca(_arg, routeId) {
   const [st, hist] = await Promise.all([A.myStats(), A.myAttendance(user.id)]);
+  if (!isCurrentRoute(routeId)) return;
   view.innerHTML = `<h2>Presença</h2>
     <section class="stats">${stat("fa-calendar-check", st.presences, "presenças")}${stat("fa-dumbbell", st.completed, "treinos")}${stat("fa-fire", st.streak, "sequência")}</section>
     ${checkinCard(st.checked_in_today)}
@@ -180,8 +186,9 @@ const perfilStats = (st, sess) => `<section class="stats">${stat("fa-calendar-ch
   }).join("")}</ul>` : '<div class="empty"><p>Nenhum treino concluído ainda.</p></div>'}</section>
   <a class="btn" href="#conquistas"><i class="fa-solid fa-trophy"></i> Ver conquistas</a>`;
 
-async function perfil() {
+async function perfil(_arg, routeId) {
   const [g, tx, st, sess] = await Promise.all([G.myGame(), G.myXpTx(user.id, 8), A.myStats(), W.mySessions(user.id, 8)]);
+  if (!isCurrentRoute(routeId)) return;
   const extras = `${xpCard(g)}${perfilStats(st, sess)}<section class="card"><h3><i class="fa-solid fa-clock-rotate-left"></i> Histórico de XP</h3>${tx.length ? `<ul class="rows">${tx.map((t) => `<li><span style="text-align:left;color:var(--white)">${esc(SOURCE[t.source] || t.source)}<small class="muted" style="display:block">${esc(t.reason || "")} · ${dBR(t.created_at)}</small></span><strong class="${t.amount > 0 ? "ok" : ""}">${t.amount > 0 ? "+" : ""}${t.amount}</strong></li>`).join("")}</ul>` : '<div class="empty"><p>Sem XP ainda. Faça check-in!</p></div>'}</section>
     ${g.throne.total_seconds > 0 ? `<section class="card"><h3><i class="fa-solid fa-crown"></i> Seu histórico no Trono</h3><p>Tempo total: <strong>${fmtDuration(g.throne.total_seconds)}</strong></p><p class="muted">Maior sequência de dias no trono: ${g.throne.best_consecutive_days}</p></section>` : ""}
     <section class="card"><h3>Níveis alcançados</h3><ul class="rows">${g.levels.map((l) => `<li><strong>Nível ${l.level}</strong><span>${dBR(l.reached_at)}</span></li>`).join("")}</ul></section>
@@ -214,16 +221,18 @@ const rankRows = (rows) => rows.map((r) => `<li class="rk ${r.is_me ? "me" : ""}
   <img class="avatar-xs" src="${esc(avatarOf(r))}" alt="" loading="lazy" referrerpolicy="no-referrer"><span><strong>${esc(r.display_name)}</strong>${r.is_me ? " (você)" : ""}<small>Nível ${r.level}</small></span>
   <span class="xp">${r.xp_total} XP${r.gap_to_first > 0 ? `<small>−${r.gap_to_first}</small>` : ""}</span></li>`).join("");
 
-async function ranking(tab = "xp") {
+async function ranking(tab = "xp", routeId) {
   const seg = `<nav class="seg" aria-label="Rankings">${[["xp", "XP"], ["freq", "Frequência"], ["trono", "O Trono"]].map(([k, l]) => `<a href="#ranking/${k}" aria-selected="${k === tab}">${l}</a>`).join("")}</nav>`;
   if (tab === "freq") {
     const rows = await G.attendanceRanking(30);
+    if (!isCurrentRoute(routeId)) return;
     view.innerHTML = `${seg}<section class="card"><h3>Frequência · 30 dias</h3>${rows.length ? `<ul style="padding:0">${rows.map((r, i) => `<li class="rk ${r.is_me ? "me" : ""}"><span class="pos">${i + 1}</span>
       <img class="avatar-xs" src="${esc(avatarOf(r))}" alt="" loading="lazy" referrerpolicy="no-referrer"><span><strong>${esc(r.display_name)}</strong><small>${r.presences} presenças · ${r.completed} treinos · sequência ${r.streak}${r.absences != null ? ` · faltas ${r.absences}` : ""}</small></span>
       <span class="xp">${r.frequency_pct}%</span></li>`).join("")}</ul>` : '<div class="empty"><p>Sem alunos no ranking ainda.</p></div>'}
       <p class="muted">Frequência = presenças em dias de treino programado. Faltas só aparecem para você e para o treinador.</p></section>`;
   } else if (tab === "trono") {
     const th = await G.getThrone(), k = th.king;
+    if (!isCurrentRoute(routeId)) return;
     view.innerHTML = `${seg}${k ? `<section class="card king king-ranking-spotlight"><i class="fa-solid fa-crown"></i><img src="${esc(avatarOf(k))}" alt="" referrerpolicy="no-referrer"><h2>${esc(k.name)}</h2>
       <p class="muted">Nível ${k.level} · ${k.xp} XP</p><p>No trono há <strong>${fmtDuration(k.summary.current_reign_seconds)}</strong></p>
       <p class="muted">Total acumulado: ${fmtDuration(k.summary.total_seconds)} · dias seguidos: ${k.summary.current_consecutive_days}</p></section>`
@@ -235,6 +244,7 @@ async function ranking(tab = "xp") {
   } else {
     const PAGE = 30; let off = 0;
     const first = await G.xpRanking(PAGE, 0);
+    if (!isCurrentRoute(routeId)) return;
     view.innerHTML = `${seg}<section class="card"><h3>Ranking de XP</h3>${first.length ? `<ul id="rk" style="padding:0">${rankRows(first)}</ul>` : '<div class="empty"><p>Sem alunos no ranking ainda.</p></div>'}
       ${first.length === PAGE ? '<button class="btn" id="more">Ver mais</button>' : ""}<p class="muted">Aparecem: foto, nome, nível e XP.</p></section>`;
     $("#more")?.addEventListener("click", (e) => guarded(e.currentTarget, async () => {
@@ -243,8 +253,9 @@ async function ranking(tab = "xp") {
   }
 }
 
-async function conquistas() {
+async function conquistas(_arg, routeId) {
   const list = await G.myAchievements(), done = list.filter((a) => a.unlocked_at).length;
+  if (!isCurrentRoute(routeId)) return;
   view.innerHTML = `<h2>Conquistas</h2><p class="muted">${done} de ${list.length} desbloqueadas</p><div class="ach-grid">${list.map((a) => {
     const on = !!a.unlocked_at, pct = Math.min(100, Math.round(100 * a.current / a.target)), rw = a.xp_reward ? ` · +${a.xp_reward} XP` : "";
     return `<div class="ach ${on ? "on" : ""}"><i class="fa-solid ${esc(a.icon)}"></i><div><strong>${esc(a.name)}</strong> <span class="badge rar-${esc(a.rarity)}">${RAR[a.rarity] || ""}</span>
@@ -258,19 +269,22 @@ const evCard = (e) => `<a class="card" href="#evento/${e.id}" style="text-decora
   <p class="muted">${fmtDateTime(e.starts_at)}${e.location ? " · " + esc(e.location) : ""}</p>
   ${e.status === "cancelled" ? '<span class="badge warn">Cancelado</span>' : e.rescheduled ? '<span class="badge warn">Data alterada</span>' : ""} ${e.xp_reward ? `<span class="badge">+${e.xp_reward} XP</span>` : ""}</a>`;
 
-async function eventos() {
+async function eventos(_arg, routeId) {
   const all = await E.listEvents(), now = Date.now();
+  if (!isCurrentRoute(routeId)) return;
   const up = all.filter((e) => e.status === "published" && new Date(e.starts_at) >= now).reverse();
   const past = all.filter((e) => !up.includes(e));
   view.innerHTML = `<h2>Eventos</h2>${up.length ? up.map(evCard).join("") : '<div class="card empty"><i class="fa-solid fa-calendar-xmark"></i><p>Nenhum evento futuro por enquanto.</p></div>'}
     ${past.length ? `<h3>Anteriores</h3>${past.map(evCard).join("")}` : ""}`;
 }
 
-async function evento(id) {
+async function evento(id, routeId) {
   const e = await E.getEvent(id);
+  if (!isCurrentRoute(routeId)) return;
   const back = '<header class="bar"><a class="back" href="#eventos" aria-label="Voltar aos eventos"><i class="fa-solid fa-chevron-left"></i></a><h2>Evento</h2></header>';
   if (!e || e.status === "draft") { view.innerHTML = back + '<div class="card empty"><p>Evento não encontrado.</p></div>'; return; }
   const [reg, part] = await Promise.all([E.myRegistration(id, user.id), E.myParticipation(id, user.id)]);
+  if (!isCurrentRoute(routeId)) return;
   const future = new Date(e.starts_at) > Date.now(), canReg = e.status === "published" && e.registration_enabled && future;
   const active = reg && reg.status !== "cancelled";
   const info = (ic, t) => t ? `<p><i class="fa-solid ${ic}" style="color:var(--neon);width:1.4rem"></i> ${esc(t)}</p>` : "";
@@ -291,8 +305,9 @@ async function evento(id) {
   })));
 }
 
-async function loja() {
+async function loja(_arg, routeId) {
   const [list, num] = await Promise.all([S.listProducts(), S.whatsapp()]);
+  if (!isCurrentRoute(routeId)) return;
   view.innerHTML = `<h2>Loja do Box</h2>${num ? "" : '<p class="muted">Pedidos pelo WhatsApp: configuração pendente (fale com o treinador).</p>'}
     ${list.length ? `<div class="prod-grid">${list.map((p) => {
       const can = p.availability === "available";
@@ -313,6 +328,9 @@ function mais() {
 
 const ROUTES = { inicio, treino, semana, presenca, perfil, ranking, conquistas, eventos, evento, loja, mais };
 let appStarted = false;
+let activeRouteId = 0;
+let activeRouteHash = location.hash;
+const isCurrentRoute = (routeId) => routeId === activeRouteId && location.hash === activeRouteHash;
 function startApp() {
   if (!appStarted) {
     appStarted = true;
@@ -326,11 +344,13 @@ function startApp() {
   return route();
 }
 async function route() {
+  const routeId = ++activeRouteId;
+  activeRouteHash = location.hash;
   const [name = "inicio", arg] = location.hash.slice(1).split("/");
   document.querySelectorAll("#nav a").forEach((a) => a.setAttribute("aria-current", a.dataset.r === (["conquistas", "loja", "perfil", "semana", "presenca"].includes(name) ? "mais" : name === "evento" ? "eventos" : name) ? "page" : "false"));
   loading();
-  try { await (ROUTES[name] || inicio)(arg); animateIn(view); }
-  catch (e) { view.innerHTML = `<div class="card"><p>${esc(friendly(e))}</p><button class="btn" id="retry">Tentar de novo</button></div>`; $("#retry").onclick = route; animateIn(view); }
+  try { await (ROUTES[name] || inicio)(arg, routeId); if (!isCurrentRoute(routeId)) return; animateIn(view); }
+  catch (e) { if (!isCurrentRoute(routeId)) return; view.innerHTML = `<div class="card"><p>${esc(friendly(e))}</p><button class="btn" id="retry">Tentar de novo</button></div>`; $("#retry").onclick = route; animateIn(view); }
 }
 
 function setup() {

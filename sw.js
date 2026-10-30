@@ -1,4 +1,4 @@
-const CACHE_NAME = 'box-jardim-silvina-v6';
+const CACHE_NAME = 'box-jardim-silvina-v7';
 const APP_SHELL = [
   './',
   './index.html',

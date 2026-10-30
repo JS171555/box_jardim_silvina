@@ -29,10 +29,11 @@ export async function guarded(btn, fn, loadingLabel = "Processando…") {
 }
 export const reducedMotion = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
 export function animateIn(root = document) {
-  const items = root.querySelectorAll(".card, .hero, .stats, .adm-day, .day");
+  const items = root.querySelectorAll(":scope > .card, :scope > .hero, :scope > .stats, :scope > .weeknav, :scope > .seg, :scope > .day, :scope > .ach-grid, :scope > h2, :scope > .muted");
   if (!window.gsap || reducedMotion() || !items.length) return;
+  window.gsap.killTweensOf(items);
   window.gsap.fromTo(items, { opacity: 0, y: 8 }, {
-    opacity: 1, y: 0, duration: .28, stagger: .035, ease: "power2.out", clearProps: "transform",
+    opacity: 1, y: 0, duration: .38, stagger: .035, ease: "power2.out", clearProps: "opacity,transform",
   });
 }
 const MSGS = {
@@ -49,6 +50,6 @@ export function countUp(root = document) {
     const to = Number(el.dataset.count) || 0;
     if (!window.gsap || reducedMotion() || !to) { el.textContent = to; return; }
     const o = { v: 0 };
-    gsap.to(o, { v: to, duration: .8, ease: "power2.out", onUpdate: () => { el.textContent = Math.round(o.v); } });
+    window.gsap.to(o, { v: to, duration: .8, ease: "power2.out", onUpdate: () => { el.textContent = Math.round(o.v); } });
   });
 }
