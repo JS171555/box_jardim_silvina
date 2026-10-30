@@ -56,7 +56,7 @@ async function inicio(_arg, routeId) {
   view.innerHTML = `
     <header class="hero"><img class="avatar-sm" src="${esc(avatarSrc())}" alt="" referrerpolicy="no-referrer">
       <div><p class="muted">Bora treinar,</p><h1>${esc(profile.display_name)}</h1></div></header>
-    <section class="stats">${stat("fa-calendar-check", st.presences, "presenças")}${stat("fa-dumbbell", st.completed, "treinos")}${stat("fa-fire", st.streak, "sequência")}</section>
+    <section class="stats stats-home">${stat("fa-calendar-check", st.presences, "presenças")}${stat("fa-dumbbell", st.completed, "treinos")}${stat("fa-fire", st.streak, "sequência")}</section>
     ${xpCard(g)}${throneBanner(th)}${checkinCard(st.checked_in_today)}
     <section class="card"><h3><i class="fa-solid fa-dumbbell"></i> Treino de hoje</h3>
       ${w ? `<p><strong>${esc(w.title)}</strong> ${w.personalized ? '<span class="badge">Personalizado para você</span>' : ""}</p>
