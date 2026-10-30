@@ -227,3 +227,40 @@ body.app { padding-bottom: calc(var(--nav-h) + 16px + env(safe-area-inset-bottom
   .stats-summary .stat i { width: 2.55rem; height: 2.55rem; border-radius: .8rem; font-size: 1.25rem; }
   .stats-summary .stat span { font-size: .61rem; }
 }
+
+/* Superfícies minimalistas para os indicadores nas três áreas */
+.stats-home .stat,
+.stats-summary .stat {
+  background: linear-gradient(155deg, rgba(255,255,255,.045), rgba(255,255,255,.012) 58%), var(--surface);
+  border: 1px solid rgba(255,255,255,.085);
+  box-shadow: inset 0 1px rgba(255,255,255,.035), 0 8px 22px rgba(0,0,0,.18);
+}
+.stats-home .stat:hover,
+.stats-summary .stat:hover {
+  background: linear-gradient(155deg, rgba(255,255,255,.065), rgba(255,255,255,.02) 58%), var(--surface-2);
+  border-color: rgba(198,244,50,.28);
+  box-shadow: inset 0 1px rgba(255,255,255,.05), 0 12px 28px rgba(0,0,0,.24);
+}
+.stats-home .stat::after,
+.stats-summary .stat::after { display: none; }
+.stats-home .stat i,
+.stats-summary .stat i {
+  border-color: rgba(198,244,50,.18);
+  border-radius: .85rem;
+  background: rgba(198,244,50,.075);
+  box-shadow: none;
+  filter: none;
+}
+.stats-home .stat:nth-child(2) i,
+.stats-summary .stat:nth-child(2) i { color: var(--neon); }
+.stats-home .stat:nth-child(3) i,
+.stats-summary .stat:nth-child(3) i {
+  color: #ffd07a;
+  border-color: rgba(255,208,122,.2);
+  background: rgba(255,208,122,.075);
+  box-shadow: none;
+  filter: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .stats-home .stat, .stats-summary .stat { transition: none; }
+}
