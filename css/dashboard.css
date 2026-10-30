@@ -106,3 +106,56 @@ body.app { padding-bottom: calc(var(--nav-h) + 16px + env(safe-area-inset-bottom
   #view > section.card:not(:has(.rows)):not(:has(form)):not(:has(#rk)) { grid-column: auto; }
   #toasts { bottom: 24px !important; }
 }
+
+/* Refinamento do painel do aluno — desktop apenas */
+@media (min-width: 900px) {
+  body.app { padding-left: 112px; }
+
+  #view {
+    width: min(100%, 1480px);
+    margin-inline: auto;
+    padding: 2.25rem clamp(1.5rem, 3vw, 3.5rem) 3rem;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: 1.25rem;
+    row-gap: 1.1rem;
+  }
+
+  #view > * { grid-column: 1 / -1; min-width: 0; }
+  #view > section.card:not(:has(.rows)):not(:has(form)):not(:has(#rk)) { grid-column: span 6; }
+  #view > .stats { grid-column: 1 / -1; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+  #view > .stats .stat { min-height: 7.5rem; padding: 1.1rem 1.25rem; }
+  #view > .hero { padding-block: .5rem; }
+  #view > .hero h1 { font-size: clamp(2.4rem, 3vw, 3.4rem); }
+  #view > .seg { grid-column: 1 / -1; width: min(100%, 680px); justify-self: center; margin-bottom: .2rem; }
+
+  /* Início: destaques em linha e cartões de conteúdo balanceados. */
+  #view > .stats-home { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  #view > .stats-home .stat { min-height: 9rem; padding: 1.1rem 1.3rem; }
+  #view > .stats-home .stat strong { font-size: clamp(2rem, 2.5vw, 2.7rem); }
+  #view > .card.king { grid-column: span 6; }
+  #view > section.card:has(#checkin) { grid-column: span 5; }
+  #view > section.card:has(.btn[href^="#treino/"]) { grid-column: span 7; }
+  #view > section.card:has(.rows) { grid-column: span 6; }
+
+  /* Perfil: formulário compacto ao lado do resumo de XP. */
+  #view > section.card[style*="text-align:center"] { grid-column: span 5; align-self: start; }
+  #view > section.card[style*="text-align:center"] form { max-width: 38rem; margin-inline: auto; }
+  #view > section.card:has(.xp-track) { grid-column: span 7; align-self: start; }
+  #view > section.stats { grid-column: 1 / -1; }
+
+  /* Presença: indicadores em destaque e histórico ao lado do check-in. */
+  #view > section.card:has(#checkin) { grid-column: span 5; }
+  #view > section.card:has(.rows) { grid-column: span 7; }
+
+  /* Frequência/XP preservam legibilidade da lista; O Trono usa melhor a largura. */
+  #view > section.card:has(#rk),
+  #view > section.card:has(> ul[style]) { grid-column: 1 / -1; }
+  #view > section.card.king-ranking-spotlight { grid-column: span 6; align-self: stretch; }
+  #view > section.card.king-ranking-spotlight ~ section.card { grid-column: span 6; }
+
+  /* Treino: blocos textuais em duas colunas com largura confortável. */
+  #view > header.bar { grid-column: 1 / -1; }
+  #view > section.card:has(.rows) { grid-column: span 6; }
+  #view > section.card:has(textarea),
+  #view > section.card:has(#start) { grid-column: 1 / -1; }
+}
