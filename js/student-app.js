@@ -197,11 +197,31 @@ async function perfil(_arg, routeId) {
     <img class="avatar" src="${esc(avatarSrc())}" alt="Sua foto" width="96" height="96" referrerpolicy="no-referrer">
     <p class="muted">No box desde ${new Date(profile.joined_at).toLocaleDateString("pt-BR")}</p>
     <form id="pf" novalidate style="text-align:left"><label for="name">Nome de exibição</label><input id="name" maxlength="40" value="${esc(profile.display_name)}">
-    <label for="photo">Trocar foto</label><input id="photo" type="file" accept="image/jpeg,image/png,image/webp,image/avif">
+    <span class="photo-label">Foto de perfil</span>
+    <div class="photo-picker">
+      <div class="photo-preview"><img id="photo-preview" src="${esc(avatarSrc())}" alt="Prévia da foto de perfil" width="76" height="76" referrerpolicy="no-referrer"><span><i class="fa-solid fa-camera"></i></span></div>
+      <div class="photo-picker-copy"><strong id="photo-title">Sua foto, do seu jeito</strong><small id="photo-hint">JPG, PNG, WebP ou AVIF · escolha uma imagem nítida</small>
+        <label class="photo-select" for="photo"><i class="fa-solid fa-arrow-up-from-bracket" aria-hidden="true"></i> Escolher foto</label>
+        <span class="photo-filename" id="photo-filename" aria-live="polite">Nenhum arquivo novo selecionado</span>
+      </div>
+      <input class="photo-input" id="photo" type="file" accept="image/jpeg,image/png,image/webp,image/avif" aria-describedby="photo-hint">
+    </div>
     <button class="btn btn-primary" id="save" type="submit" style="margin-top:1rem">Salvar alterações</button></form></section>
     ${extras}<button class="btn" id="logout"><i class="fa-solid fa-right-from-bracket"></i> Sair</button>`;
   animateBars(); countUp(view);
   $("#logout").onclick = signOut;
+  $("#photo").addEventListener("change", (e) => {
+    const file = e.currentTarget.files?.[0];
+    if (!file) return;
+    const preview = $("#photo-preview");
+    const previousUrl = preview.dataset.objectUrl;
+    if (previousUrl) URL.revokeObjectURL(previousUrl);
+    const objectUrl = URL.createObjectURL(file);
+    preview.dataset.objectUrl = objectUrl;
+    preview.src = objectUrl;
+    $("#photo-title").textContent = "Foto pronta para salvar";
+    $("#photo-filename").textContent = file.name;
+  });
   $("#pf").addEventListener("submit", (e) => {
     e.preventDefault();
     const name = $("#name").value.trim();
