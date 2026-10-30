@@ -168,7 +168,7 @@ async function presenca(_arg, routeId) {
   const [st, hist] = await Promise.all([A.myStats(), A.myAttendance(user.id)]);
   if (!isCurrentRoute(routeId)) return;
   view.innerHTML = `<h2>Presença</h2>
-    <section class="stats">${stat("fa-calendar-check", st.presences, "presenças")}${stat("fa-dumbbell", st.completed, "treinos")}${stat("fa-fire", st.streak, "sequência")}</section>
+    <section class="stats stats-summary">${stat("fa-calendar-check", st.presences, "presenças")}${stat("fa-dumbbell", st.completed, "treinos")}${stat("fa-fire", st.streak, "sequência")}</section>
     ${checkinCard(st.checked_in_today)}
     <section class="card"><h3>Histórico</h3>${hist.length
       ? `<ul class="rows">${hist.map((h) => `<li><strong>${fmtDate(h.attendance_date)}</strong><span>${h.status === "present" ? "Presente" : "Falta justificada"}${h.source === "admin" ? " (treinador)" : ""}</span></li>`).join("")}</ul>`
@@ -177,7 +177,7 @@ async function presenca(_arg, routeId) {
   bindCheckin(); countUp(view);
 }
 
-const perfilStats = (st, sess) => `<section class="stats">${stat("fa-calendar-check", st.presences, "presenças")}${stat("fa-dumbbell", st.completed, "treinos")}${stat("fa-fire", st.streak, "sequência")}</section>
+const perfilStats = (st, sess) => `<section class="stats stats-summary">${stat("fa-calendar-check", st.presences, "presenças")}${stat("fa-dumbbell", st.completed, "treinos")}${stat("fa-fire", st.streak, "sequência")}</section>
   <section class="card"><h3><i class="fa-solid fa-list-check"></i> Histórico de treinos</h3>${sess.length ? `<ul class="rows">${sess.map((x) => {
     const workout = x.workouts;
     const workoutDate = workout?.workout_date ? fmtDate(workout.workout_date) : x.finished_at ? dBR(x.finished_at) : "Data indisponível";
