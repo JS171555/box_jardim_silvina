@@ -523,3 +523,6 @@ body.app { padding-bottom: calc(var(--nav-h) + 16px + env(safe-area-inset-bottom
 .ach.is-locked .ach-icon > i:first-child { opacity: 1; }
 .ach.is-locked .ach-lock { display: none; }
 .ach.is-locked:hover { border-color: var(--line-strong); box-shadow: none; }
+
+/* Cards desbloqueados sem preenchimento de fundo */
+.ach.is-unlocked { background: transparent; }
