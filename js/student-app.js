@@ -282,7 +282,7 @@ async function conquistas(_arg, routeId) {
   if (!isCurrentRoute(routeId)) return;
   view.innerHTML = `<h2>Conquistas</h2><p class="muted">${done} de ${list.length} desbloqueadas</p><div class="ach-grid">${list.map((a) => {
     const on = !!a.unlocked_at, pct = Math.min(100, Math.round(100 * a.current / a.target)), rw = a.xp_reward ? ` · +${a.xp_reward} XP` : "";
-    return `<div class="ach ${on ? "on" : ""}"><i class="fa-solid ${esc(a.icon)}"></i><div><strong>${esc(a.name)}</strong> <span class="badge rar-${esc(a.rarity)}">${RAR[a.rarity] || ""}</span>
+    return `<div class="ach rar-${esc(a.rarity)} ${on ? "on" : ""}"><i class="fa-solid ${esc(a.icon)}"></i><div><strong>${esc(a.name)}</strong> <span class="badge rar-${esc(a.rarity)}">${RAR[a.rarity] || ""}</span>
       <small>${esc(a.description)}</small>${on ? `<small>Desbloqueada em ${dBR(a.unlocked_at)}${rw}</small>` : `<div class="xp-track"><div class="xp-fill" data-pct="${pct}"></div></div><small>${a.current} / ${a.target}${rw}</small>`}</div></div>`;
   }).join("")}</div>`;
   animateBars();

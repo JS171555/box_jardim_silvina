@@ -453,3 +453,31 @@ body.app { padding-bottom: calc(var(--nav-h) + 16px + env(safe-area-inset-bottom
   .xp-achievements > div { justify-content: flex-start; }
 }
 @media (prefers-reduced-motion: reduce) { .xp-card { transition: none; } }
+
+/* Identidade cromática dos cards de conquista por raridade */
+.ach.rar-common { --ach-color: 198,244,50; --ach-solid: #c6f432; }
+.ach.rar-rare { --ach-color: 92,200,255; --ach-solid: #5cc8ff; }
+.ach.rar-epic { --ach-color: 196,139,255; --ach-solid: #c48bff; }
+.ach.rar-legendary { --ach-color: 255,174,76; --ach-solid: #ffae4c; }
+.ach[class*="rar-"] {
+  border-color: rgba(var(--ach-color),.32);
+  background: linear-gradient(135deg, rgba(var(--ach-color),.105), rgba(var(--ach-color),.025) 55%), var(--surface);
+  filter: none;
+  transition: opacity .2s, transform .22s var(--ease), border-color .22s, box-shadow .22s;
+}
+.ach[class*="rar-"]:not(.on) { opacity: .78; }
+.ach[class*="rar-"] > i {
+  color: var(--ach-solid);
+  border: 1px solid rgba(var(--ach-color),.35);
+  background: linear-gradient(145deg, rgba(var(--ach-color),.2), rgba(var(--ach-color),.07));
+  box-shadow: inset 0 1px rgba(255,255,255,.09), 0 4px 12px rgba(var(--ach-color),.08);
+}
+.ach[class*="rar-"].on {
+  border-color: rgba(var(--ach-color),.52);
+  box-shadow: inset 0 1px rgba(255,255,255,.045), 0 8px 22px rgba(0,0,0,.18), 0 0 18px rgba(var(--ach-color),.045);
+}
+.ach[class*="rar-"]:hover {
+  transform: translateY(-2px);
+  border-color: rgba(var(--ach-color),.68);
+  box-shadow: inset 0 1px rgba(255,255,255,.06), 0 12px 24px rgba(0,0,0,.22), 0 0 20px rgba(var(--ach-color),.08);
+}
