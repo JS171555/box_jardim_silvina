@@ -481,3 +481,27 @@ body.app { padding-bottom: calc(var(--nav-h) + 16px + env(safe-area-inset-bottom
   border-color: rgba(var(--ach-color),.68);
   box-shadow: inset 0 1px rgba(255,255,255,.06), 0 12px 24px rgba(0,0,0,.22), 0 0 20px rgba(var(--ach-color),.08);
 }
+
+/* Estados das conquistas: bloqueada versus recompensa desbloqueada */
+.ach[class*="rar-"] > .ach-icon {
+  position: relative;
+  flex: 0 0 48px;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border: 1px solid rgba(var(--ach-color),.35);
+  border-radius: 14px;
+  background: linear-gradient(145deg, rgba(var(--ach-color),.2), rgba(var(--ach-color),.07));
+  color: var(--ach-solid);
+  box-shadow: inset 0 1px rgba(255,255,255,.09), 0 4px 12px rgba(var(--ach-color),.08);
+}
+.ach-icon > i:first-child { font-size: 1.3rem; }
+.ach-lock { position: absolute; right: -5px; bottom: -5px; display: grid; place-items: center; width: 20px; height: 20px; border: 2px solid var(--surface); border-radius: 50%; background: #34382f; color: #d1d5c9; font-size: .58rem; box-shadow: 0 2px 5px rgba(0,0,0,.35); }
+.ach.is-locked { opacity: .58; border-color: rgba(var(--ach-color),.23); background: linear-gradient(135deg, rgba(var(--ach-color),.055), rgba(255,255,255,.012) 58%), var(--surface); }
+.ach.is-locked > .ach-icon { background: linear-gradient(145deg, rgba(var(--ach-color),.105), rgba(var(--ach-color),.035)); border-color: rgba(var(--ach-color),.24); box-shadow: none; }
+.ach.is-locked .ach-icon > i:first-child { opacity: .62; }
+.ach.is-unlocked { opacity: 1; border-color: rgba(var(--ach-color),.58); background: linear-gradient(135deg, rgba(var(--ach-color),.14), rgba(var(--ach-color),.035) 58%), var(--surface); box-shadow: inset 0 1px rgba(255,255,255,.055), 0 8px 22px rgba(0,0,0,.2), 0 0 17px rgba(var(--ach-color),.055); }
+.ach.is-unlocked > .ach-icon { border-color: rgba(var(--ach-color),.55); box-shadow: inset 0 1px rgba(255,255,255,.13), 0 5px 14px rgba(var(--ach-color),.12); }
+.ach-status { color: var(--ach-solid) !important; font-weight: 600; }
+.ach-status i { margin-right: .2rem; }

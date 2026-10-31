@@ -282,8 +282,8 @@ async function conquistas(_arg, routeId) {
   if (!isCurrentRoute(routeId)) return;
   view.innerHTML = `<h2>Conquistas</h2><p class="muted">${done} de ${list.length} desbloqueadas</p><div class="ach-grid">${list.map((a) => {
     const on = !!a.unlocked_at, pct = Math.min(100, Math.round(100 * a.current / a.target)), rw = a.xp_reward ? ` · +${a.xp_reward} XP` : "";
-    return `<div class="ach rar-${esc(a.rarity)} ${on ? "on" : ""}"><i class="fa-solid ${esc(a.icon)}"></i><div><strong>${esc(a.name)}</strong> <span class="badge rar-${esc(a.rarity)}">${RAR[a.rarity] || ""}</span>
-      <small>${esc(a.description)}</small>${on ? `<small>Desbloqueada em ${dBR(a.unlocked_at)}${rw}</small>` : `<div class="xp-track"><div class="xp-fill" data-pct="${pct}"></div></div><small>${a.current} / ${a.target}${rw}</small>`}</div></div>`;
+    return `<div class="ach rar-${esc(a.rarity)} ${on ? "on is-unlocked" : "is-locked"}"><span class="ach-icon"><i class="fa-solid ${esc(a.icon)}" aria-hidden="true"></i>${on ? "" : '<span class="ach-lock" aria-label="Conquista bloqueada"><i class="fa-solid fa-lock" aria-hidden="true"></i></span>'}</span><div><strong>${esc(a.name)}</strong> <span class="badge rar-${esc(a.rarity)}">${RAR[a.rarity] || ""}</span>
+      <small>${esc(a.description)}</small>${on ? `<small class="ach-status"><i class="fa-solid fa-circle-check" aria-hidden="true"></i> Desbloqueada em ${dBR(a.unlocked_at)}${rw}</small>` : `<div class="xp-track" role="progressbar" aria-label="Progresso: ${esc(a.name)}" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100"><div class="xp-fill" data-pct="${pct}"></div></div><small>${a.current} / ${a.target}${rw}</small>`}</div></div>`;
   }).join("")}</div>`;
   animateBars();
 }
