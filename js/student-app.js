@@ -36,11 +36,15 @@ const avatarOf = (r) => avatarUrl(r.avatar_path) || r.avatar_url || LOGO;
 const dBR = (x) => new Date(x).toLocaleDateString("pt-BR");
 const RAR = { common: "Comum", rare: "Rara", epic: "Épica", legendary: "Lendária" };
 const animateBars = () => view.querySelectorAll(".xp-fill").forEach((b) => animateBar(b, b.dataset.pct));
-const xpCard = (g) => `<section class="card"><div class="lvl-row"><span class="muted">Nível</span><strong>${g.level}</strong></div>
-  <div class="xp-track" role="progressbar" aria-label="Progresso até o próximo nível" aria-valuenow="${g.progress_pct}" aria-valuemin="0" aria-valuemax="100"><div class="xp-fill" data-pct="${g.progress_pct}"></div></div>
-  <p><strong>${g.xp_total} XP</strong> <span class="muted">${g.next_level_xp != null ? `· faltam ${g.next_level_xp - g.xp_total} para o nível ${g.level + 1}` : "· nível máximo"}</span></p>
-  <p class="muted">${g.rank ? `Posição #${g.rank} de ${g.total_students}${g.gap_to_first > 0 ? ` · ${g.gap_to_first} XP atrás do líder` : " · você lidera!"}` : ""}
-  ${g.recent_achievements.length ? `<br>Recentes: ${g.recent_achievements.map((a) => `<i class="fa-solid ${esc(a.icon)} rar-${esc(a.rarity)}" title="${esc(a.name)}"></i>`).join(" ")}` : ""}</p></section>`;
+const xpCard = (g) => `<section class="card xp-card">
+  <div class="xp-card-head"><div class="xp-level-copy"><span class="xp-eyebrow">Sua evolução</span><span class="xp-level-label">Nível atual</span></div>
+    <div class="xp-level-badge"><i class="fa-solid fa-bolt" aria-hidden="true"></i><strong>${g.level}</strong></div></div>
+  <div class="xp-progress-block"><div class="xp-progress-heading"><span>Progresso</span><strong>${g.progress_pct}%</strong></div>
+    <div class="xp-track" role="progressbar" aria-label="Progresso até o próximo nível" aria-valuenow="${g.progress_pct}" aria-valuemin="0" aria-valuemax="100"><div class="xp-fill" data-pct="${g.progress_pct}"></div></div></div>
+  <div class="xp-card-foot"><div class="xp-total"><strong>${g.xp_total} <span>XP</span></strong><small>${g.next_level_xp != null ? `· faltam ${g.next_level_xp - g.xp_total} para o nível ${g.level + 1}` : "· nível máximo"}</small></div>
+    <div class="xp-social">${g.rank ? `<p class="xp-rank">Posição <strong>#${g.rank}</strong> de ${g.total_students}${g.gap_to_first > 0 ? ` · ${g.gap_to_first} XP atrás do líder` : " · você lidera!"}</p>` : ""}
+    ${g.recent_achievements.length ? `<div class="xp-achievements"><span>Conquistas recentes</span><div>${g.recent_achievements.map((a) => `<i class="fa-solid ${esc(a.icon)} rar-${esc(a.rarity)}" title="${esc(a.name)}" aria-label="${esc(a.name)}"></i>`).join("")}</div></div>` : ""}</div></div>
+  </section>`;
 const throneBanner = (th) => th.king ? `<a class="card king" href="#ranking/trono" style="text-decoration:none;color:inherit"><i class="fa-solid fa-crown"></i><p class="muted">O Trono</p><strong>${esc(th.king.name)}</strong><small class="muted">no trono há ${fmtDuration(th.king.summary.current_reign_seconds)}</small></a>` : "";
 
 const homeExtras = (evs, prods) => `${evs.length ? `<section class="card"><h3><i class="fa-solid fa-calendar-days"></i> Próximos eventos</h3><ul class="rows">${evs.map((e) => `<li><a href="#evento/${e.id}">${esc(e.title)}</a><span>${fmtDateTime(e.starts_at)}</span></li>`).join("")}</ul></section>` : ""}
