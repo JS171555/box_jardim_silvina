@@ -537,12 +537,8 @@ body.app { padding-bottom: calc(var(--nav-h) + 16px + env(safe-area-inset-bottom
 .profile-display-name { margin: .3rem 0 .05rem; color: var(--white); font: 700 1.35rem/1.2 var(--font-head); letter-spacing: .025em; overflow-wrap: anywhere; }
 .profile-joined { margin: 0; font-size: .82rem; }
 .settings-card { display: grid; gap: 1.1rem; }
-.settings-heading { display: flex; align-items: center; gap: .85rem; padding-bottom: .85rem; border-bottom: 1px solid var(--line); }
-.settings-heading h3 { margin: 0; }
-.settings-heading p { margin: .15rem 0 0; font-size: .86rem; }
-.settings-icon { flex: 0 0 46px; display: grid; place-items: center; width: 46px; height: 46px; border: 1px solid rgba(198,244,50,.25); border-radius: 14px; background: var(--neon-soft); color: var(--neon); font-size: 1.25rem; }
 .settings-card form { min-width: 0; }
-.settings-logout { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-top: 1rem; border-top: 1px solid var(--line); }
+.settings-logout { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-top: .25rem; border-top: 0; }
 .settings-logout > div { display: grid; gap: .2rem; }
 .settings-logout > div strong { color: var(--white); }
 .settings-logout > div small { color: var(--muted); line-height: 1.35; }

@@ -208,7 +208,7 @@ async function perfil(_arg, routeId) {
 
 async function configuracoes(_arg, routeId) {
   if (!isCurrentRoute(routeId)) return;
-  view.innerHTML = `<h2>Configurações</h2><section class="card settings-card"><div class="settings-heading"><span class="settings-icon"><i class="fa-solid fa-user-gear" aria-hidden="true"></i></span><div><h3>Gerenciar conta</h3><p class="muted">Atualize suas informações pessoais e foto de perfil.</p></div></div>
+  view.innerHTML = `<h2>Configurações</h2><section class="card settings-card">
     <form id="pf" novalidate><label for="name">Nome de exibição</label><input id="name" maxlength="40" value="${esc(profile.display_name)}">
     <span class="photo-label">Foto de perfil</span>
     <div class="photo-picker">
