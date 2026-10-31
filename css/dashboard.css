@@ -526,3 +526,31 @@ body.app { padding-bottom: calc(var(--nav-h) + 16px + env(safe-area-inset-bottom
 
 /* Cards desbloqueados sem preenchimento de fundo */
 .ach.is-unlocked { background: transparent; }
+
+/* Identidade do Perfil e acesso às configurações */
+.profile-identity { display: grid; justify-items: center; align-content: start; gap: .15rem; padding-block: 1.5rem; }
+.profile-avatar-wrap { position: relative; display: inline-grid; margin-bottom: .45rem; }
+.profile-avatar-wrap .avatar { display: block; margin: 0; }
+.profile-settings-button { position: absolute; right: -5px; bottom: -3px; display: grid; place-items: center; width: 38px; height: 38px; border: 3px solid var(--surface); border-radius: 50%; background: var(--neon); color: var(--ink); font-size: 1rem; box-shadow: 0 5px 16px rgba(0,0,0,.4), 0 0 0 1px rgba(198,244,50,.42); transition: transform .2s var(--ease), box-shadow .2s, background .2s; }
+.profile-settings-button:hover { transform: rotate(24deg) scale(1.08); color: var(--ink); background: #d8ff4c; box-shadow: 0 7px 20px rgba(0,0,0,.45), 0 0 0 3px rgba(198,244,50,.15); }
+.profile-settings-button:focus-visible { outline: 2px solid var(--white); outline-offset: 4px; }
+.profile-display-name { margin: .3rem 0 .05rem; color: var(--white); font: 700 1.35rem/1.2 var(--font-head); letter-spacing: .025em; overflow-wrap: anywhere; }
+.profile-joined { margin: 0; font-size: .82rem; }
+.settings-card { display: grid; gap: 1.1rem; }
+.settings-heading { display: flex; align-items: center; gap: .85rem; padding-bottom: .85rem; border-bottom: 1px solid var(--line); }
+.settings-heading h3 { margin: 0; }
+.settings-heading p { margin: .15rem 0 0; font-size: .86rem; }
+.settings-icon { flex: 0 0 46px; display: grid; place-items: center; width: 46px; height: 46px; border: 1px solid rgba(198,244,50,.25); border-radius: 14px; background: var(--neon-soft); color: var(--neon); font-size: 1.25rem; }
+.settings-card form { min-width: 0; }
+.settings-logout { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-top: 1rem; border-top: 1px solid var(--line); }
+.settings-logout > div { display: grid; gap: .2rem; }
+.settings-logout > div strong { color: var(--white); }
+.settings-logout > div small { color: var(--muted); line-height: 1.35; }
+.settings-logout .btn { width: auto; min-height: 42px; margin: 0; padding: .5rem .9rem; border-color: rgba(255,90,78,.3); color: #ff8a80; }
+.settings-logout .btn:hover { border-color: rgba(255,90,78,.6); background: rgba(255,90,78,.1); color: #ffb0a8; }
+@media (max-width: 480px) {
+  .profile-identity { padding-block: 1.25rem; }
+  .settings-logout { align-items: flex-start; }
+  .settings-logout .btn { flex-shrink: 0; }
+}
+@media (prefers-reduced-motion: reduce) { .profile-settings-button { transition: none; } }

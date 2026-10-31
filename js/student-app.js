@@ -197,10 +197,19 @@ async function perfil(_arg, routeId) {
     ${g.throne.total_seconds > 0 ? `<section class="card"><h3><i class="fa-solid fa-crown"></i> Seu histórico no Trono</h3><p>Tempo total: <strong>${fmtDuration(g.throne.total_seconds)}</strong></p><p class="muted">Maior sequência de dias no trono: ${g.throne.best_consecutive_days}</p></section>` : ""}
     <section class="card"><h3>Níveis alcançados</h3><ul class="rows">${g.levels.map((l) => `<li><strong>Nível ${l.level}</strong><span>${dBR(l.reached_at)}</span></li>`).join("")}</ul></section>
     <p class="muted"><a href="#presenca">Histórico de presença</a> · <a href="#semana">Semana de treinos</a></p>`;
-  view.innerHTML = `<h2>Perfil</h2><section class="card" style="text-align:center">
-    <img class="avatar" src="${esc(avatarSrc())}" alt="Sua foto" width="96" height="96" referrerpolicy="no-referrer">
-    <p class="muted">No box desde ${new Date(profile.joined_at).toLocaleDateString("pt-BR")}</p>
-    <form id="pf" novalidate style="text-align:left"><label for="name">Nome de exibição</label><input id="name" maxlength="40" value="${esc(profile.display_name)}">
+  view.innerHTML = `<h2>Perfil</h2><section class="card profile-identity" style="text-align:center">
+    <div class="profile-avatar-wrap"><img class="avatar" src="${esc(avatarSrc())}" alt="Sua foto" width="96" height="96" referrerpolicy="no-referrer">
+      <a class="profile-settings-button" href="#configuracoes" aria-label="Abrir configurações" title="Configurações"><i class="fa-solid fa-gear" aria-hidden="true"></i></a></div>
+    <h3 class="profile-display-name">${esc(profile.display_name)}</h3>
+    <p class="muted profile-joined">No box desde ${new Date(profile.joined_at).toLocaleDateString("pt-BR")}</p></section>
+    ${extras}`;
+  animateBars(); countUp(view);
+}
+
+async function configuracoes(_arg, routeId) {
+  if (!isCurrentRoute(routeId)) return;
+  view.innerHTML = `<h2>Configurações</h2><section class="card settings-card"><div class="settings-heading"><span class="settings-icon"><i class="fa-solid fa-user-gear" aria-hidden="true"></i></span><div><h3>Gerenciar conta</h3><p class="muted">Atualize suas informações pessoais e foto de perfil.</p></div></div>
+    <form id="pf" novalidate><label for="name">Nome de exibição</label><input id="name" maxlength="40" value="${esc(profile.display_name)}">
     <span class="photo-label">Foto de perfil</span>
     <div class="photo-picker">
       <div class="photo-preview"><img id="photo-preview" src="${esc(avatarSrc())}" alt="Prévia da foto de perfil" width="76" height="76" referrerpolicy="no-referrer"><span><i class="fa-solid fa-camera"></i></span></div>
@@ -210,9 +219,8 @@ async function perfil(_arg, routeId) {
       </div>
       <input class="photo-input" id="photo" type="file" accept="image/jpeg,image/png,image/webp,image/avif" aria-describedby="photo-hint">
     </div>
-    <button class="btn btn-primary" id="save" type="submit" style="margin-top:1rem">Salvar alterações</button></form></section>
-    ${extras}<button class="btn" id="logout"><i class="fa-solid fa-right-from-bracket"></i> Sair</button>`;
-  animateBars(); countUp(view);
+    <button class="btn btn-primary" id="save" type="submit" style="margin-top:1rem"><i class="fa-solid fa-floppy-disk" aria-hidden="true"></i> Salvar alterações</button></form>
+    <div class="settings-logout"><div><strong>Sair da conta</strong><small>Encerra sua sessão neste dispositivo.</small></div><button class="btn" id="logout" type="button"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i> Sair</button></div></section>`;
   $("#logout").onclick = signOut;
   $("#photo").addEventListener("change", (e) => {
     const file = e.currentTarget.files?.[0];
@@ -347,10 +355,10 @@ async function loja(_arg, routeId) {
 function mais() {
   const item = (h, ic, t) => `<a class="day" href="${h}"><span><i class="fa-solid ${ic}" style="color:var(--neon);width:1.6rem"></i> ${t}</span><i class="fa-solid fa-chevron-right"></i></a>`;
   view.innerHTML = `<h2>Mais</h2>${item("#conquistas", "fa-trophy", "Conquistas")}${item("#loja", "fa-bag-shopping", "Loja do Box")}${item("#semana", "fa-calendar-week", "Semana de treinos")}
-    ${item("#presenca", "fa-calendar-check", "Presença")}${item("#perfil", "fa-user", "Meu perfil")}`;
+    ${item("#presenca", "fa-calendar-check", "Presença")}${item("#perfil", "fa-user", "Meu perfil")}${item("#configuracoes", "fa-gear", "Configurações")}`;
 }
 
-const ROUTES = { inicio, treino, semana, presenca, perfil, ranking, conquistas, eventos, evento, loja, mais };
+const ROUTES = { inicio, treino, semana, presenca, perfil, configuracoes, ranking, conquistas, eventos, evento, loja, mais };
 let appStarted = false;
 let activeRouteId = 0;
 let activeRouteHash = location.hash;
@@ -371,7 +379,7 @@ async function route() {
   const routeId = ++activeRouteId;
   activeRouteHash = location.hash;
   const [name = "inicio", arg] = location.hash.slice(1).split("/");
-  document.querySelectorAll("#nav a").forEach((a) => a.setAttribute("aria-current", a.dataset.r === (["conquistas", "loja", "perfil", "semana", "presenca"].includes(name) ? "mais" : name === "evento" ? "eventos" : name) ? "page" : "false"));
+  document.querySelectorAll("#nav a").forEach((a) => a.setAttribute("aria-current", a.dataset.r === (["conquistas", "loja", "perfil", "configuracoes", "semana", "presenca"].includes(name) ? "mais" : name === "evento" ? "eventos" : name) ? "page" : "false"));
   loading();
   try { await (ROUTES[name] || inicio)(arg, routeId); if (!isCurrentRoute(routeId)) return; animateIn(view); }
   catch (e) { if (!isCurrentRoute(routeId)) return; view.innerHTML = `<div class="card"><p>${esc(friendly(e))}</p><button class="btn" id="retry">Tentar de novo</button></div>`; $("#retry").onclick = route; animateIn(view); }
