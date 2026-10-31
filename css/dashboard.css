@@ -163,7 +163,6 @@ body.app { padding-bottom: calc(var(--nav-h) + 16px + env(safe-area-inset-bottom
 /* Seletor de foto do Perfil — responsivo em todos os tamanhos */
 .photo-label { display: block; margin: .9rem 0 .35rem; color: var(--muted); font: 600 .85rem var(--font-head); letter-spacing: .06em; text-transform: uppercase; }
 .photo-picker { position: relative; display: flex; align-items: center; gap: 1rem; min-width: 0; padding: 1rem; border: 1px solid var(--line-strong); border-radius: var(--r); background: linear-gradient(135deg, rgba(198,244,50,.075), var(--surface-2) 58%); overflow: hidden; }
-.photo-picker::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 3px; background: var(--neon); opacity: .8; }
 .photo-preview { position: relative; flex: 0 0 76px; width: 76px; height: 76px; }
 .photo-preview img { display: block; width: 100%; height: 100%; object-fit: cover; border: 2px solid rgba(198,244,50,.62); border-radius: 50%; background: var(--surface-3); box-shadow: 0 0 0 4px rgba(198,244,50,.1), 0 8px 22px rgba(0,0,0,.28); }
 .photo-preview > span { position: absolute; right: -2px; bottom: -2px; display: grid; place-items: center; width: 28px; height: 28px; border: 2px solid var(--surface); border-radius: 50%; background: var(--neon); color: var(--ink); font-size: .75rem; }
