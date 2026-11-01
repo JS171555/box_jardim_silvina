@@ -26,11 +26,16 @@ const open = (html, onSubmit) => {
 };
 
 // ---------- Treinos ----------
+let workoutRenderId = 0;
 async function tabTreinos() {
+  const renderId = ++workoutRenderId;
+  const requestedWeek = weekStart;
   if (!cats.length) cats = await supabase.from("workout_categories").select("id,name").order("id").then(ok);
-  const rows = await supabase.from("workouts").select("*").gte("workout_date", weekStart).lte("workout_date", addDays(weekStart, 6)).then(ok);
+  const rows = await supabase.from("workouts").select("*").gte("workout_date", requestedWeek).lte("workout_date", addDays(requestedWeek, 6)).then(ok);
+  // Uma navegação mais recente pode ter iniciado enquanto a consulta estava pendente.
+  if (renderId !== workoutRenderId || requestedWeek !== weekStart || tab !== "treinos") return;
   cache = Object.fromEntries(rows.map((r) => [r.workout_date, r]));
-  const days = [...Array(7)].map((_, i) => addDays(weekStart, i)).map((d) => {
+  const days = [...Array(7)].map((_, i) => addDays(requestedWeek, i)).map((d) => {
     const w = cache[d];
     return `<section class="card adm-day"><div style="display:flex;justify-content:space-between;gap:.6rem"><strong>${fmtDate(d, { weekday: "long", day: "2-digit", month: "2-digit" })}</strong>
       ${w ? `<span class="badge ${w.status === "draft" ? "warn" : ""}">${w.status === "published" ? "Publicado" : "Rascunho"}</span>` : ""}</div>
@@ -39,7 +44,7 @@ async function tabTreinos() {
         : `<div class="actions"><button class="btn btn-primary" data-act="new" data-d="${d}">Criar treino</button></div>`}</section>`;
   }).join("");
   main.innerHTML = `<div class="weeknav"><button class="link" data-act="prev">‹ Semana anterior</button><button class="link" data-act="today">Hoje</button><button class="link" data-act="next">Próxima ›</button></div>
-    <p class="muted">Semana de ${fmtDate(weekStart, { day: "2-digit", month: "long" })}. Um treino por dia; alunos só veem os publicados.</p>${days}`;
+    <p class="muted">Semana de ${fmtDate(requestedWeek, { day: "2-digit", month: "long" })}. Um treino por dia; alunos só veem os publicados.</p>${days}`;
 }
 function workoutForm(date, w = {}) {
   return `<h2>${w.id ? "Editar" : "Novo"} treino · ${fmtDate(date)}</h2>

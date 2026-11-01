@@ -98,8 +98,9 @@ No SQL Editor do Supabase, aplique os arquivos de `supabase/migrations/` em orde
 2. `002_training.sql`
 3. `003_gamification.sql`
 4. `004_events_store.sql`
+5. `005_security_tightening.sql`
 
-As migrações criam tabelas, políticas RLS e funções usadas pelo app. Revise o conteúdo e confira o estado do banco antes de reaplicar scripts.
+As migrações criam tabelas, políticas RLS e funções usadas pelo app. A migração 005 restringe a leitura de `app_settings` às chaves públicas conhecidas e protege campos adicionais do perfil. Revise o conteúdo e confira o estado do banco antes de aplicar as migrações; não reaplique scripts manualmente em um banco gerenciado por migrações sem verificar o histórico.
 
 ### 4. Provisionar o treinador
 
