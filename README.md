@@ -99,8 +99,9 @@ No SQL Editor do Supabase, aplique os arquivos de `supabase/migrations/` em orde
 3. `003_gamification.sql`
 4. `004_events_store.sql`
 5. `005_security_tightening.sql`
+6. `006_reward_notifications.sql`
 
-As migrações criam tabelas, políticas RLS e funções usadas pelo app. A migração 005 restringe a leitura de `app_settings` às chaves públicas conhecidas e protege campos adicionais do perfil. Revise o conteúdo e confira o estado do banco antes de aplicar as migrações; não reaplique scripts manualmente em um banco gerenciado por migrações sem verificar o histórico.
+As migrações criam tabelas, políticas RLS e funções usadas pelo app. A migração 005 restringe a leitura de `app_settings` às chaves públicas conhecidas e protege campos adicionais do perfil. A migração 006 registra, em fila idempotente, avisos de XP, conquistas e níveis, com reivindicação e confirmação pelo cliente autenticado. Ao atualizar uma instância existente, aplique a migration 006 no Supabase antes de publicar o novo frontend, pois ele consulta essas RPCs. Revise o conteúdo e confira o estado do banco antes de aplicar as migrações; não reaplique scripts manualmente em um banco gerenciado por migrações sem verificar o histórico.
 
 ### 4. Provisionar o treinador
 

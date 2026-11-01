@@ -8,12 +8,14 @@ import { todaySP, addDays, mondayOf, fmtDate, fmtTime, fmtDateTime } from "./dat
 import * as W from "./workouts.js";
 import * as A from "./attendance.js";
 import * as G from "./gamification.js";
-import { celebrate, animateBar, fmtDuration, SOURCE } from "./gamification.js";
+import { showRewardNotification, claimRewardNotification, ackRewardNotification, animateBar, fmtDuration, SOURCE } from "./gamification.js";
 
 const $ = (s) => document.querySelector(s);
 const view = $("#view");
 let user, profile;
 const LOGO = "assets/images/logo-box.png";
+let rewardDrainPromise = null;
+let rewardPollingStarted = false;
 const avatarSrc = () => avatarUrl(profile.avatar_path) || profile.avatar_url || LOGO;
 const loading = () => { view.innerHTML = '<div class="skeleton"></div><div class="skeleton"></div>'; };
 const stat = (ic, n, l) => `<div class="stat"><i class="fa-solid ${ic}"></i><strong data-count="${Number(n) || 0}">0</strong><span>${l}</span></div>`;
@@ -24,7 +26,6 @@ function bindCheckin() {
       const r = await A.checkIn();
       toast(r.created ? "Presença registrada." : "Você já fez check-in hoje.");
       await route();
-      celebrate(r);
     } catch (err) { toast(friendly(err), "error"); }
   }));
 }
@@ -71,7 +72,6 @@ async function inicio(_arg, routeId) {
       ${next[0] ? `<p class="muted" style="margin-top:.8rem">Próximo treino: <a href="#treino/${next[0].workout_date}">${fmtDate(next[0].workout_date)} · ${esc(next[0].title)}</a></p>` : ""}
     </section>${homeExtras(evs, prods)}`;
   bindCheckin(); countUp(view); animateBars();
-  celebrate({ unlocked: g.unlocked });
 }
 
 const fmtResult = (r, type) => {
@@ -148,7 +148,7 @@ async function treino(date, routeId) {
   $("#finish")?.addEventListener("click", (e) => guarded(e.currentTarget, async () => {
     const r = collect(w.result_type); if (r === false) return;
     if (!confirm("Finalizar o treino agora? Isso não pode ser desfeito.")) return;
-    try { const res = await W.finishSession(s.id, r); toast("Treino finalizado!"); await route(); celebrate(res); } catch (err) { toast(friendly(err), "error"); }
+    try { await W.finishSession(s.id, r); toast("Treino finalizado!"); await route(); } catch (err) { toast(friendly(err), "error"); }
   }));
 }
 
@@ -363,11 +363,37 @@ let appStarted = false;
 let activeRouteId = 0;
 let activeRouteHash = location.hash;
 const isCurrentRoute = (routeId) => routeId === activeRouteId && location.hash === activeRouteHash;
+async function drainRewardNotifications() {
+  if (rewardDrainPromise) return rewardDrainPromise;
+  rewardDrainPromise = (async () => {
+    // Uma por vez: mantém a ordem persistida pelo banco e não sobrepõe modais.
+    for (let count = 0; count < 100; count += 1) {
+      const notice = await claimRewardNotification();
+      if (!notice) break;
+      await showRewardNotification(notice);
+      const acknowledged = await ackRewardNotification(notice.notification_id, notice.claim_token);
+      if (acknowledged !== true) break;
+    }
+  })().catch((err) => {
+    // O aviso permanece pendente e será tentado novamente no próximo foco/poll.
+    console.warn("Não foi possível processar a fila de recompensas.", err);
+  }).finally(() => { rewardDrainPromise = null; });
+  return rewardDrainPromise;
+}
+function startRewardPolling() {
+  if (rewardPollingStarted) return;
+  rewardPollingStarted = true;
+  const check = () => { if (document.visibilityState === "visible") void drainRewardNotifications(); };
+  window.setInterval(check, 20000);
+  window.addEventListener("focus", check);
+  document.addEventListener("visibilitychange", check);
+}
 function startApp() {
   if (!appStarted) {
     appStarted = true;
     window.addEventListener("hashchange", route);
   }
+  startRewardPolling();
   const requestedRoute = location.hash.slice(1).split("/")[0];
   if (!ROUTES[requestedRoute]) {
     history.replaceState(null, "", `${location.pathname}${location.search}#inicio`);
@@ -383,6 +409,7 @@ async function route() {
   loading();
   try { await (ROUTES[name] || inicio)(arg, routeId); if (!isCurrentRoute(routeId)) return; animateIn(view); }
   catch (e) { if (!isCurrentRoute(routeId)) return; view.innerHTML = `<div class="card"><p>${esc(friendly(e))}</p><button class="btn" id="retry">Tentar de novo</button></div>`; $("#retry").onclick = route; animateIn(view); }
+  if (isCurrentRoute(routeId)) void drainRewardNotifications();
 }
 
 function setup() {

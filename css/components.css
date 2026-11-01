@@ -97,11 +97,22 @@ dialog .actions .btn { flex: 1; }
 @keyframes dlg-in { from { opacity: 0; transform: translateY(16px) scale(.97); } }
 
 /* Celebração */
-.celebrate { position: fixed; inset: 0; z-index: 200; display: grid; place-items: center; padding: 1.2rem; background: radial-gradient(circle at 50% 40%, rgba(198,244,50,.18), rgba(4,5,3,.88) 60%); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); animation: fade .3s ease; }
-.celebrate-card { width: min(92vw, 380px); text-align: center; padding: 2rem 1.4rem 1.4rem; border-radius: 28px; background: var(--surface); border: 1px solid rgba(198,244,50,.4); box-shadow: var(--neon-glow); }
+.celebrate { position: fixed; inset: 0; z-index: 200; display: grid; place-items: center; overflow-y: auto; overscroll-behavior: contain; padding: max(1rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) max(1rem, env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left)); background: radial-gradient(circle at 50% 40%, rgba(198,244,50,.18), rgba(4,5,3,.88) 60%); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); animation: fade .3s ease; }
+.celebrate-card { width: min(92vw, 420px); max-height: calc(100vh - 2rem); max-height: calc(100dvh - 2rem); overflow-y: auto; overscroll-behavior: contain; text-align: center; padding: 2rem 1.4rem 1.4rem; border-radius: 28px; background: var(--surface); border: 1px solid rgba(198,244,50,.4); box-shadow: var(--neon-glow); }
 .xp-gain { font-family: var(--font-display); font-size: 4rem; line-height: 1; margin: .2rem 0 1rem; background: var(--gradient-neon); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .lvl-up { font-family: var(--font-head); font-size: 1.4rem; font-weight: 800; text-transform: uppercase; color: var(--neon); }
 .cel-ach { display: flex; gap: .8rem; align-items: center; text-align: left; padding: .75rem; margin: .5rem 0; border-radius: var(--r); background: var(--surface-2); border: 1px solid var(--line); }
 .cel-ach i { font-size: 1.6rem; width: 2rem; text-align: center; }
 .cel-ach small { display: block; color: var(--muted); }
+.reward-card h2 { margin: .5rem 0 .75rem; color: var(--white); font: 800 clamp(1.15rem, 5vw, 1.45rem)/1.2 var(--font-head); }
+.reward-emblem { display: grid; place-items: center; width: 3.5rem; height: 3.5rem; margin: 0 auto .6rem; border: 1px solid rgba(198,244,50,.35); border-radius: 50%; background: linear-gradient(145deg, rgba(198,244,50,.2), rgba(198,244,50,.045)); color: var(--neon); box-shadow: 0 0 24px rgba(198,244,50,.12); font-size: 1.35rem; }
+.reward-card .xp-gain { margin: .65rem 0 .4rem; font-size: clamp(2.8rem, 13vw, 4rem); }
+.reward-origin { margin: .5rem 0; color: var(--text); line-height: 1.45; }
+.reward-reason { margin: .2rem 0 1rem; color: var(--muted); font-size: .9rem; overflow-wrap: anywhere; }
+.reward-level { margin: .7rem 0; color: var(--muted); font-size: 1.05rem; }
+.reward-level strong { display: inline-grid; place-items: center; min-width: 3.4rem; min-height: 3.4rem; margin-left: .35rem; border: 1px solid rgba(198,244,50,.35); border-radius: 1rem; background: rgba(198,244,50,.1); color: var(--neon); font: 700 1.7rem/1 var(--font-display); }
+.cel-ach.rar-common i { color: #c9cfbf; }
+.cel-ach.rar-rare i { color: #5cc8ff; }
+.cel-ach.rar-epic i { color: #c48bff; }
+.cel-ach.rar-legendary i { color: #ffc23d; }
 @keyframes fade { from { opacity: 0; } }
